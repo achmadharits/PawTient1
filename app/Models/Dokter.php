@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
+class Dokter extends Authenticatable
+{
+    use HasFactory;
+    protected $table = 'dokter';
+    protected $guard = 'dokter';
+    protected $primaryKey = 'id_dokter';
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        'id_dokter',
+        'nama',
+        'email',
+        'password',
+        'no_str',
+        'no_hp',
+        'alamat',
+    ];
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
+    protected $hidden = [
+        'password',
+    ];
+
+    public function jadwalKontrol()
+    {
+        return $this->hasMany(JadwalKontrol::class);
+    }
+}

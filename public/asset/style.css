@@ -1,0 +1,242 @@
+@font-face {
+  font-family: 'Urbanist';
+  src: url('../asset/font/Urbanist-Regular.ttf');
+}
+body{
+  font-family: 'Urbanist' !important;
+  color: #1E2B4F !important;
+  /* font-weight: 400; */
+}
+body .split-screen{
+  background: #fff;
+}
+
+/* button */
+a.btn.btn-primary{
+  color: #fff ;
+  background-color: #5A65BA ;
+  padding: 10px 24px ;
+  border: none important;
+  border-radius: 20px ;
+  gap: 10px;
+}
+a.btn.btn-primary:hover{
+  color: #fff;
+  /* font-weight: 600; */
+  background-color: #40477c ;
+}
+.btn-secondary{
+  color: #5A65BA;
+  background: none;
+  border: 1px solid #5A65BA;
+  padding: 10px 24px;
+  border-radius: 20px;
+  gap: 10px;
+}
+.btn-secondary:hover{
+  color: #fff;
+  background-color: #5A65BA;
+}
+
+/* landing page */
+.navbar-landing{
+  margin: 20px 60px;
+}
+.navbar-landing .navbar-nav{
+  gap: 14px;
+}
+.hero .text-wrapper{
+  width: 500px;
+}
+.hero-title{
+  font-weight: 700;
+  margin-bottom: 26px;
+}
+.hero-subtitle{
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+@media only screen and (max-width: 980px) {
+  .navbar-landing{
+    margin: 20px 24px;
+  }
+  .hero .text-wrapper{
+    width: auto;
+    justify-content: start;
+  }
+  .hero img{
+    width: 300px;
+  }
+}
+@media only screen and (max-width: 766px){
+  .hero img{
+    content-visibility: hidden;
+  }
+}
+
+/* login and register */
+.split-screen{
+  display: flex;
+  flex-direction: column;
+}
+.auth-left, .auth-right{
+  display: flex;
+  justify-content: center;
+}
+.auth-right{
+  align-items: center;
+}
+.register-right{
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  height: min-content;
+  overflow-x: hidden;
+  overflow-y: auto;
+  margin-top: 20px;
+}
+.auth-left{
+  background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.5)),
+  url('../asset/img/login-img.png');
+  background-size: cover;
+  align-items: center;
+}
+.auth-left h5{
+  color: #fff;
+}
+.auth-left .copy{
+  color: #fff;
+  text-align: left;
+}
+.auth-left h5, .auth-right h4, .register-right h4{
+  font-weight: 700;
+  font-size: 32px;
+}
+.auth-right .copy, .register-right .copy{
+  width: 421px;
+}
+.input-auth .btn{
+  width: 421px;
+  margin-top: 42px;
+}
+.input-auth a{
+  font-weight: 700;
+  text-decoration: none;
+  color: #1E2B4F;
+}
+.input-auth a:hover{
+  color: #40477c;
+}
+@media screen and (min-width: 900px){
+  .split-screen{
+    flex-direction: row;
+    height: 100vh;
+  }
+  .auth-left, .auth-right, .register-right{
+    display: flex;
+    width: 50%;
+    height: auto;
+  }
+}
+@media screen and (max-width: 899px){
+  .auth-right .copy, .register-right .copy{
+    margin-top: 30px;
+  }
+  .auth-left .copy{
+    padding: 24px;
+    text-align: center;
+  }
+}
+
+/* form control */
+.input-auth .form-control, .input-auth .form-select{
+  background-color: #eef1f5 !important;
+}
+.form-control, .form-select{
+  border-radius: 12px !important;
+  /* height: 42px !important; */
+}
+
+/* navbar template */
+.navbar-light{
+  background-color: #fff !important;
+  height: 68px !important;
+}
+
+/* iconify */
+iconify-icon{
+  font-size: 24px;
+}
+.sidebar-item.active>.sidebar-link iconify-icon{
+  color: #414BA0;
+}
+.icon-left iconify-icon{
+  vertical-align: middle;
+  font-size: 18px;
+  margin-right: 5px;
+  margin-top: -5px;
+}
+
+/* sidebar template */
+.sidebar-header img{
+  width: 100px;
+}
+.sidebar-wrapper .sidebar-header img{
+  height: auto !important;
+}
+.menu-logout{
+  position: relative;
+}
+
+/* button index */
+.button{
+  float: right !important;
+}
+@media screen and (max-width: 768px){
+  .button{
+    float: left !important;
+    margin-bottom: 14px;
+  }
+}
+
+/* button icon */
+a.btn.btn-icon{
+  background-color: #DDE2EC;
+  border-radius: 5px;
+  width: 28px;
+  height: 28px;
+}
+button.btn.btn-icon{
+  background-color: #DDE2EC;
+  border-radius: 5px;
+  width: 28px;
+  height: 28px;
+}
+.btn-icon iconify-icon{
+  color: #606D93;
+  font-size: 15px;
+  margin-left: -4px;
+}
+
+/* table action */
+td .table-action{
+  display: flex !important;
+}
+
+/* .btn-icon-trash iconify-icon{
+  color: #FF7144;
+  font-size: 15px;
+  margin-left: -4px;
+} */
+/* input foto */
+/* .form-control.input-foto{
+  width: 120px;
+} */
+/* .profile .round{
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: #e6eaee;
+  width: 32px;
+  height: 32px;
+} */
