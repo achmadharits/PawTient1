@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DokterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JadwalKontrolController;
+use App\Http\Controllers\RekamMedisController;
 use Illuminate\Routing\RouteGroup;
 
 /*
@@ -55,6 +56,7 @@ Route::name('register.')->group(function (){
 
 Route::resource('jadwal', JadwalKontrolController::class);
 Route::resource('profil', DokterController::class);
+Route::resource('rekam-medis', RekamMedisController::class);
 
 
 // Auth::routes();

@@ -62,19 +62,19 @@
                         </ul>
                     </li>
                 
-                    <li class="sidebar-item has-sub">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ $title == 'rekam-medis' ? 'active' : '' }}">
+                        <a href="{{ url('/rekam-medis') }}" class='sidebar-link'>
                             <iconify-icon icon="akar-icons:paper"></iconify-icon>
                             <span>Rekam Medis</span>
                         </a>
-                        <ul class="submenu">
+                        {{-- <ul class="submenu">
                             <li class="submenu-item ">
-                                <a href="layout-default.html">Default Layout</a>
+                                <a href="{{ url('/rekam-medis') }}">Daftar Rekam Medis</a>
                             </li>
                             <li class="submenu-item ">
-                                <a href="layout-vertical-1-column.html">1 Column</a>
+                                <a href="layout-vertical-1-column.html">Buat Rekam Medis</a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </li>
                 </ul>
             </div>
