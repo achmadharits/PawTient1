@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Dokter;
+use App\Models\JadwalKontrol;
 use App\Models\Pasien;
 
 class HomeController extends Controller
@@ -26,10 +27,11 @@ class HomeController extends Controller
     public function index()
     {
         $datas = Dokter::all();
-        
+        // $jadwal = JadwalKontrol::where('status', 'Aktif')->count();
         return view('dokter.dashboard.index', [
             'datas' => $datas,
             'title' => 'home',
+            // 'jadwal' => $jadwal,
         ]);
     }
 }

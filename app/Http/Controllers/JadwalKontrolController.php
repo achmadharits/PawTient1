@@ -7,6 +7,7 @@ use App\Models\Dokter;
 use App\Models\Pasien;
 use Illuminate\Http\Request;
 use App\Models\JadwalKontrol;
+use App\Models\JadwalPraktik;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -33,7 +34,6 @@ class JadwalKontrolController extends Controller
      */
     public function index()
     {
-        // $datas = JadwalKontrol::all();
         $id = Auth::guard('dokter')->user()->id_dokter;
         $datas = JadwalKontrol::where('id_dokter', $id)->orderBy('tgl_jadwal', 'desc')->get();
         return view('dokter.jadwal.index', [
@@ -50,9 +50,31 @@ class JadwalKontrolController extends Controller
     public function create()
     {
         $datas = Pasien::all();
+        $id = Auth::guard('dokter')->user()->id_dokter;
+        $tanggal = JadwalPraktik::where('id_dokter', $id)->get();
+
+        foreach($tanggal as $tgl){
+            if($tgl->hari == "Senin"){
+                $tgl->hari = 1;
+            }elseif($tgl->hari == "Selasa"){
+                $tgl->hari = 2;
+            }elseif($tgl->hari == "Rabu"){
+                $tgl->hari = 3;
+            }elseif($tgl->hari == "Kamis"){
+                $tgl->hari = 4;
+            }elseif($tgl->hari == "Jumat"){
+                $tgl->hari = 5;
+            }elseif($tgl->hari == "Sabtu"){
+                $tgl->hari = 6;
+            }elseif($tgl->hari == "Minggu"){
+                $tgl->hari = 7;
+            }
+        }
+        // dd($tanggal->pluck('hari'));
         return view('dokter.jadwal.create', [
             'title' => 'jadwal',
             'datas' => $datas,
+            'tanggal' => $tanggal->pluck('hari'),
         ]);
         
     }
@@ -76,11 +98,14 @@ class JadwalKontrolController extends Controller
             $id_jadwalCustom++;
         }
         
+        // change date format
+        $newTgl = Carbon::createFromFormat('m/d/Y', $request['tgl_jadwal'])->format('Y-m-d');
+
         $jadwal = JadwalKontrol::create([
             'id_jadwal' => $id_jadwalCustom,
             'id_dokter' => $request['id_dokter'],
             'id_pasien' => $request['id_pasien'],
-            'tgl_jadwal' => $request['tgl_jadwal'],
+            'tgl_jadwal' => $newTgl,
             'status' => 'Undelivered',
         ]);
         
@@ -100,9 +125,9 @@ class JadwalKontrolController extends Controller
             $jadwal->pesan = $pesan;
             $jadwal->status = 'Active';
             $jadwal->save(); 
-            return redirect('jadwal')->withSuccess('Jadwal berhasil dibuat.');
+            return redirect('jadwal-kontrol')->withSuccess('Jadwal berhasil dibuat.');
         } else {
-            return redirect('jadwal');
+            return redirect('jadwal-kontrol');
             $errorMessage = $response->body();
         }
     }
@@ -160,7 +185,7 @@ class JadwalKontrolController extends Controller
 
         $datas->tgl_jadwal = $request->tgl_jadwal;
         $datas->save();
-        return redirect('jadwal')->withSuccess('Data jadwal berhasil diubah.');
+        return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil diubah.');
     }
 
     /**
@@ -173,7 +198,7 @@ class JadwalKontrolController extends Controller
     {
         $datas = JadwalKontrol::find($id);
         $datas->delete();
-        return redirect('jadwal')->withSuccess('Data jadwal berhasil dihapus.');
+        return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil dihapus.');
 
     }
 }

@@ -167,6 +167,10 @@ a.btn.btn-primary:hover{
 iconify-icon{
   font-size: 24px;
 }
+iconify-icon.secondary{
+  font-size: 20px;
+  color: #A9B4CD;
+}
 .sidebar-item.active>.sidebar-link iconify-icon{
   color: #414BA0;
 }
@@ -175,6 +179,23 @@ iconify-icon{
   font-size: 18px;
   margin-right: 5px;
   margin-top: -5px;
+}
+iconify-icon.stat-icon{
+  font-size: 30px;
+  color: #414BA0;
+}
+
+/* patien-list */
+.patient-list{
+  padding: 14px 0;
+}
+.avatar-img img{
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+}
+.avatar-name h6{
+  margin-bottom: -4px;
 }
 
 /* sidebar template */

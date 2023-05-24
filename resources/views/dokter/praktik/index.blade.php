@@ -10,11 +10,11 @@
         <div class="page-title">
           <div class="row mb-4">
             <div class="col-12 col-md-6 order-md-1 order-last">
-              <h3>Daftar Jadwal Kontrol</h3>
+              <h3>Jadwal Praktik</h3>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
               <div class="button">
-                <a href="{{ url('/jadwal-kontrol/create') }}" class="btn icon icon-left btn-primary">
+                <a href="{{ url('/jadwal-praktik/create') }}" class="btn icon icon-left btn-primary">
                   <iconify-icon icon="akar-icons:plus"></iconify-icon>
                   Buat Jadwal
                 </a>
@@ -35,34 +35,16 @@
                 <table class="table table-striped" id="table1">
                     <thead>
                         <tr>
-                            <th data-sortable>ID Jadwal</th>
-                            <th data-sortable>Nama Pasien</th>
-                            <th data-sortable>Tanggal Jadwal</th>
-                            <th data-sortable>Status</th>
+                            <th>Hari Praktik</th>
+                            <th>Jam Kerja</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                       @foreach ($datas as $data)
-                        @php
-                          $tgl = date_create($data->tgl_jadwal);
-                          $now = Carbon\Carbon::now();
-                          $interval = $tgl->diff($now);
-                          $selisih = $interval->format('%R');
-                          // echo($selisih);
-                          if ($selisih != '-') {
-                            $data->status = 'Selesai';
-                          }else {
-                            $data->status = 'Aktif';
-                          }
-                        @endphp
                         <tr>
-                            <td>{{ $data->id_jadwal }}</td>
-                            <td>{{ $data->pasien->nama }}</td>
-                            <td>{{ $data->tgl_jadwal }}</td>
-                            <td>
-                              <span class="badge {{ $data->status === 'Aktif' ? 'bg-light-success' : 'bg-light-secondary' }}">{{ $data->status }}</span>
-                            </td>
+                            <td>{{ $data->hari }}</td>
+                            <td>{{ $data->jam_kerja }}</td>
                             <td>
                               <div class="table-action">
                                 {{-- edit --}}

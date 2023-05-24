@@ -25,7 +25,7 @@
         <section class="section">
           <div class="card">
             <div class="card-body">
-              <form method="POST" action="{{ url('jadwal/'.$datas->id_jadwal) }}">
+              <form method="POST" action="{{ url('jadwal-kontrol/'.$datas->id_jadwal) }}">
                 @csrf
                 <input type="hidden" name="_method" value="PATCH">
                 <div class="create-group">

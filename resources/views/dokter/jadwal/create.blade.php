@@ -25,7 +25,7 @@
         <section class="section">
           <div class="card">
             <div class="card-body">
-              <form method="POST" action="{{ url('jadwal') }}">
+              <form method="POST" action="{{ url('jadwal-kontrol') }}">
                 @csrf
                 <div class="create-group">
                   {{-- nama dokter --}}
@@ -53,7 +53,7 @@
                   {{-- tgl jadwal --}}
                   <div class="form-group">
                     <label for="tgl_jadwal">Tanggal Jadwal</label>
-                    <input name="tgl_jadwal" type="date" class="form-control @error('tgl_jadwal') is-invalid @enderror">
+                    <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror">
                     @error('tgl_jadwal')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -74,4 +74,26 @@
   </div>
   {{-- end of main content --}}
 </div>
+
+<script type="text/javascript">
+  $(function () {
+    var allowedDays = {{ $tanggal }};
+    $("#datepicker").datepicker({
+      altFormat: "dd/mm/yy",
+      minDate: 0,
+      beforeShowDay: function (date) {
+        var day = date.getDay();
+        if (allowedDays.includes(day)) {
+          return [true, ""]; // tanggal dapat dipilih
+        } else {
+          return [
+            false,
+            "disabled",
+            "Hanya boleh memilih tanggal dengan hari Selasa, Rabu, atau Jumat.",
+          ]; // tanggal tidak dapat dipilih
+        }
+      },
+    });
+  });
+</script>
 @endsection
