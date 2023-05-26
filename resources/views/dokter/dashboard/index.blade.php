@@ -33,7 +33,7 @@
                         </div>
                         <div class="col-lg-9 col-md-9 col-sm-9 col-9">
                           <h6 class="text-muted">Jadwal Aktif</h6>
-                          <h6>6</h6>
+                          <h6><a href="{{ url('/jadwal-kontrol') }}" class="stretched-link"></a>{{ $jadwal }}</h6>
                         </div>
                       </div>
                     </div>

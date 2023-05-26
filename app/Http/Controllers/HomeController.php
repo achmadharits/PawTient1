@@ -27,11 +27,11 @@ class HomeController extends Controller
     public function index()
     {
         $datas = Dokter::all();
-        // $jadwal = JadwalKontrol::where('status', 'Aktif')->count();
+        $jadwal = JadwalKontrol::where('status', 'Aktif')->count();
         return view('dokter.dashboard.index', [
             'datas' => $datas,
             'title' => 'home',
-            // 'jadwal' => $jadwal,
+            'jadwal' => $jadwal,
         ]);
     }
 }

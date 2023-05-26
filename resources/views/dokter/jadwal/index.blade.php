@@ -44,18 +44,6 @@
                     </thead>
                     <tbody>
                       @foreach ($datas as $data)
-                        @php
-                          $tgl = date_create($data->tgl_jadwal);
-                          $now = Carbon\Carbon::now();
-                          $interval = $tgl->diff($now);
-                          $selisih = $interval->format('%R');
-                          // echo($selisih);
-                          if ($selisih != '-') {
-                            $data->status = 'Selesai';
-                          }else {
-                            $data->status = 'Aktif';
-                          }
-                        @endphp
                         <tr>
                             <td>{{ $data->id_jadwal }}</td>
                             <td>{{ $data->pasien->nama }}</td>

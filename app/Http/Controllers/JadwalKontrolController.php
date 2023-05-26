@@ -27,6 +27,19 @@ class JadwalKontrolController extends Controller
         Carbon::setLocale('id');
         return Carbon::parse($date)->translatedFormat('l, d F Y');
     }
+
+    public function updateStatus($status)
+    {
+        $now = Carbon::now();
+        $interval = $status->diff($now);
+        $selisih = $interval->format('%R');
+
+        if($selisih != '-'){
+            JadwalKontrol::updateOrCreate([
+                'status' => 'Selesai'
+            ]);
+        }
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,8 +47,12 @@ class JadwalKontrolController extends Controller
      */
     public function index()
     {
+        // cek status jadwal
+        JadwalKontrol::where('tgl_jadwal', '<', now())->update(['status' => 'Selesai']);
+
         $id = Auth::guard('dokter')->user()->id_dokter;
         $datas = JadwalKontrol::where('id_dokter', $id)->orderBy('tgl_jadwal', 'desc')->get();
+        // $this->updateStatus($datas->tgl_jadwal);
         return view('dokter.jadwal.index', [
             'title' => 'jadwal',
             'datas' => $datas,
@@ -123,7 +140,7 @@ class JadwalKontrolController extends Controller
         if ($response->ok()) {
             // $responseData = $response->json();
             $jadwal->pesan = $pesan;
-            $jadwal->status = 'Active';
+            $jadwal->status = 'Aktif';
             $jadwal->save(); 
             return redirect('jadwal-kontrol')->withSuccess('Jadwal berhasil dibuat.');
         } else {
