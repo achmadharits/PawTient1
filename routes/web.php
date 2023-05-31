@@ -56,6 +56,8 @@ Route::name('register.')->group(function (){
 });
 
 Route::resource('jadwal-kontrol', JadwalKontrolController::class);
+Route::post('jadwal-kontrol/cancel/{id}', [JadwalKontrolController::class, 'cancelJadwal']);
+
 Route::resource('jadwal-praktik', JadwalPraktikController::class);
 Route::resource('profil', DokterController::class);
 Route::resource('rekam-medis', RekamMedisController::class);

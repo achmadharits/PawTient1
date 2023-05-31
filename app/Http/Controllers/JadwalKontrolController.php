@@ -28,17 +28,10 @@ class JadwalKontrolController extends Controller
         return Carbon::parse($date)->translatedFormat('l, d F Y');
     }
 
-    public function updateStatus($status)
+    public function setDay($date)
     {
-        $now = Carbon::now();
-        $interval = $status->diff($now);
-        $selisih = $interval->format('%R');
-
-        if($selisih != '-'){
-            JadwalKontrol::updateOrCreate([
-                'status' => 'Selesai'
-            ]);
-        }
+        Carbon::setLocale('id');
+        return Carbon::parse($date)->translatedFormat('l');
     }
     /**
      * Display a listing of the resource.
@@ -48,7 +41,7 @@ class JadwalKontrolController extends Controller
     public function index()
     {
         // cek status jadwal
-        JadwalKontrol::where('tgl_jadwal', '<', now())->update(['status' => 'Selesai']);
+        JadwalKontrol::where('tgl_jadwal', '<', now()->toDateString())->update(['status' => 'Selesai']);
 
         $id = Auth::guard('dokter')->user()->id_dokter;
         $datas = JadwalKontrol::where('id_dokter', $id)->orderBy('tgl_jadwal', 'desc')->get();
@@ -116,7 +109,7 @@ class JadwalKontrolController extends Controller
         }
         
         // change date format
-        $newTgl = Carbon::createFromFormat('m/d/Y', $request['tgl_jadwal'])->format('Y-m-d');
+        $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d');
 
         $jadwal = JadwalKontrol::create([
             'id_jadwal' => $id_jadwalCustom,
@@ -127,7 +120,10 @@ class JadwalKontrolController extends Controller
         ]);
         
         // create reminder message
-        $pesan = 'Halo ' . $jadwal->pasien->nama . ', kamu ada jadwal melakukan kontrol dengan drg. ' . $jadwal->dokter->nama . ' pada '. $this->setDate($jadwal->tgl_jadwal);
+        $id = Auth::guard('dokter')->user()->id_dokter;
+        $hari = $this->setDay($jadwal->tgl_jadwal);
+        $jam = JadwalPraktik::where('id_dokter', $id)->where('hari', $hari)->first();
+        $pesan = 'Halo '.$jadwal->pasien->nama.', kamu ada jadwal melakukan kontrol dengan drg. '.$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).'. Silakan datang ke klinik pada jam praktik '.$jam->jam_kerja.' WIB.';
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
             'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
@@ -180,9 +176,30 @@ class JadwalKontrolController extends Controller
     public function edit($id)
     {
         $datas = JadwalKontrol::find($id);
+        $id = Auth::guard('dokter')->user()->id_dokter;
+        $tanggal = JadwalPraktik::where('id_dokter', $id)->get();
+        foreach($tanggal as $tgl){
+            if($tgl->hari == "Senin"){
+                $tgl->hari = 1;
+            }elseif($tgl->hari == "Selasa"){
+                $tgl->hari = 2;
+            }elseif($tgl->hari == "Rabu"){
+                $tgl->hari = 3;
+            }elseif($tgl->hari == "Kamis"){
+                $tgl->hari = 4;
+            }elseif($tgl->hari == "Jumat"){
+                $tgl->hari = 5;
+            }elseif($tgl->hari == "Sabtu"){
+                $tgl->hari = 6;
+            }elseif($tgl->hari == "Minggu"){
+                $tgl->hari = 7;
+            }
+        }
+
         return view('dokter.jadwal.edit', [
             'title' => 'jadwal',
             'datas' => $datas,
+            'tanggal' => $tanggal->pluck('hari'),
         ]);
     }
 
@@ -200,9 +217,31 @@ class JadwalKontrolController extends Controller
         ]);
         $datas = JadwalKontrol::find($id);
 
-        $datas->tgl_jadwal = $request->tgl_jadwal;
+        // change date format
+        $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d');
+
+        $datas->tgl_jadwal = $newTgl;
         $datas->save();
         return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil diubah.');
+    }
+
+    public function cancelJadwal($id)
+    {
+        $datas = JadwalKontrol::find($id);
+        $datas->update(['status' => 'Batal']);
+
+        // create reminder message
+        $pesan = 'Halo '.$datas->pasien->nama.', kami memohon maaf untuk jadwal kontrol dengan drg. '.$datas->dokter->nama.' pada '.$this->setDate($datas->tgl_jadwal).' dibatalkan.\nSilakan menunggu jadwal terbaru atau mengajukan reservasi jadwal kepada dokter gigi yang bersangkutan. Terima kasih.';
+        // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
+        $response = Http::withHeaders([
+            'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
+        ])->post('https://api.fonnte.com/send', [
+            'target' => $datas->pasien->no_hp,
+            'message' => $pesan,
+            'countryCode' => '62',
+        ]);
+
+        return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil dibatalkan.');
     }
 
     /**

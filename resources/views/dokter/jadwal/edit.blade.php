@@ -36,10 +36,10 @@
                   </div>
 
                   {{-- id jadwal --}}
-                  <div class="form-group">
+                  {{-- <div class="form-group">
                     <label for="nama-pasien">ID Jadwal</label>
                     <input type="text" class="form-control" name="id_pasien" value="{{ $datas->id_jadwal }}" disabled>
-                  </div>
+                  </div> --}}
   
                   {{-- nama pasien --}}
                   <div class="form-group">
@@ -50,7 +50,7 @@
                   {{-- tgl jadwal --}}
                   <div class="form-group">
                     <label for="tgl_jadwal">Tanggal Jadwal</label>
-                    <input name="tgl_jadwal" type="date" class="form-control @error('tgl_jadwal') is-invalid @enderror" value="{{ $datas->tgl_jadwal }}">
+                    <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror" value="{{ str_replace('-', '/', $datas->tgl_jadwal) }}" autocomplete="off">
                     @error('tgl_jadwal')
                     <span class="invalid-feedback role="alert">
                         <strong>{{ $message }}</strong>
@@ -71,4 +71,25 @@
   </div>
   {{-- end of main content --}}
 </div>
+
+<script type="text/javascript">
+  $(function () {
+    var allowedDays = {{ $tanggal }};
+    $("#datepicker").datepicker({
+      dateFormat: "yy/mm/dd",
+      minDate: 0,
+      beforeShowDay: function (date) {
+        var day = date.getDay();
+        if (allowedDays.includes(day)) {
+          return [true, ""]; // tanggal dapat dipilih
+        } else {
+          return [
+            false,
+          ]; // tanggal tidak dapat dipilih
+        }
+      },
+    });
+  });
+</script>
+
 @endsection

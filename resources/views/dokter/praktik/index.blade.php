@@ -48,14 +48,14 @@
                             <td>
                               <div class="table-action">
                                 {{-- edit --}}
-                                <a href="{{ url('jadwal/'.$data->id_jadwal.'/edit') }}" class="btn icon btn-icon me-1 {{ $data->status === 'Selesai' ? 'd-none' : '' }}" alt="edit">
+                                <a href="{{ url('jadwal-praktik/'.$data->id.'/edit') }}" class="btn icon btn-icon me-1" alt="edit">
                                   <iconify-icon icon="akar-icons:pencil" data-align="center"></iconify-icon>
                                 </a>
                                 {{-- delete --}}
-                                <form action="{{ url('jadwal/'.$data->id_jadwal) }}" method="POST">
+                                <form action="{{ url('jadwal-praktik/'.$data->id) }}" method="POST">
                                   @csrf
                                   <input type="hidden" name="_method" value="DELETE">
-                                  <button type="submit" class="btn icon btn-icon {{ $data->status === 'Selesai' ? 'd-none' : '' }}" alt="delete">
+                                  <button type="submit" class="btn icon btn-icon" alt="delete">
                                     <iconify-icon icon="akar-icons:trash-can"></iconify-icon>
                                   </button>
                                 </form>

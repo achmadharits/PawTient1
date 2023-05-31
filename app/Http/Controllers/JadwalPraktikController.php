@@ -80,7 +80,11 @@ class JadwalPraktikController extends Controller
      */
     public function edit($id)
     {
-        //
+        $datas = JadwalPraktik::find($id);
+        return view('dokter.praktik.edit', [
+            'datas' => $datas,
+            'title' => 'praktik',
+        ]);
     }
 
     /**
@@ -92,7 +96,14 @@ class JadwalPraktikController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $datas = JadwalPraktik::find($id);
+        $jamKerja = $request['jam_kerja1']." - ".$request['jam_kerja2'];
+
+        $datas->hari = $request->hari;
+        $datas->jam_kerja = $jamKerja;
+        $datas->save();
+
+        return redirect('jadwal-praktik')->withSuccess('Data jadwal berhasil diubah.');
     }
 
     /**
@@ -103,6 +114,8 @@ class JadwalPraktikController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $datas = JadwalPraktik::find($id);
+        $datas->delete();
+        return redirect('jadwal-praktik')->withSuccess('Data jadwal berhasil dihapus.');
     }
 }

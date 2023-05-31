@@ -54,15 +54,22 @@
                             <td>
                               <div class="table-action">
                                 {{-- edit --}}
-                                <a href="{{ url('jadwal/'.$data->id_jadwal.'/edit') }}" class="btn icon btn-icon me-1 {{ $data->status === 'Selesai' ? 'd-none' : '' }}" alt="edit">
+                                <a href="{{ url('jadwal-kontrol/'.$data->id_jadwal.'/edit') }}" class="btn icon btn-icon me-1 {{ $data->status === 'Selesai' || $data->status === 'Batal' ? 'd-none' : '' }}" alt="edit">
                                   <iconify-icon icon="akar-icons:pencil" data-align="center"></iconify-icon>
                                 </a>
                                 {{-- delete --}}
-                                <form action="{{ url('jadwal/'.$data->id_jadwal) }}" method="POST">
+                                <form action="{{ url('jadwal-kontrol/'.$data->id_jadwal) }}" method="POST">
                                   @csrf
                                   <input type="hidden" name="_method" value="DELETE">
-                                  <button type="submit" class="btn icon btn-icon {{ $data->status === 'Selesai' ? 'd-none' : '' }}" alt="delete">
+                                  <button type="submit" class="btn icon btn-icon me-1 {{ $data->status === 'Selesai' || $data->status === 'Batal' ? 'd-none' : '' }}" alt="delete">
                                     <iconify-icon icon="akar-icons:trash-can"></iconify-icon>
+                                  </button>
+                                </form>
+                                {{-- cancel --}}
+                                <form action="{{ url('jadwal-kontrol/cancel/'.$data->id_jadwal) }}" method="POST">
+                                  @csrf
+                                  <button type="submit" class="btn icon btn-icon {{ $data->tgl_jadwal === now()->toDateString() && $data->status === 'Aktif' ? '' : 'd-none' }}" alt="batal">
+                                    <iconify-icon icon="akar-icons:cross"></iconify-icon>
                                   </button>
                                 </form>
                               </div>

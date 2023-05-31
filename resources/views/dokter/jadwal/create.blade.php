@@ -53,7 +53,7 @@
                   {{-- tgl jadwal --}}
                   <div class="form-group">
                     <label for="tgl_jadwal">Tanggal Jadwal</label>
-                    <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror">
+                    <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror" autocomplete="off" placeholder="YYYY/MM/DD">
                     @error('tgl_jadwal')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -79,7 +79,7 @@
   $(function () {
     var allowedDays = {{ $tanggal }};
     $("#datepicker").datepicker({
-      altFormat: "dd/mm/yy",
+      dateFormat: "yy/mm/dd",
       minDate: 0,
       beforeShowDay: function (date) {
         var day = date.getDay();
@@ -88,8 +88,6 @@
         } else {
           return [
             false,
-            "disabled",
-            "Hanya boleh memilih tanggal dengan hari Selasa, Rabu, atau Jumat.",
           ]; // tanggal tidak dapat dipilih
         }
       },
