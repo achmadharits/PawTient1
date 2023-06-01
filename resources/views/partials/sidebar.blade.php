@@ -33,7 +33,7 @@
                     </li>
                     
                     <li class="sidebar-item has-sub {{ $title == 'jadwal' ? 'active' : '' }}">
-                        <a href="{{ url('/jadwal') }}" class='sidebar-link'>
+                        <a href="{{ url('/jadwal-kontrol') }}" class='sidebar-link'>
                             <iconify-icon icon="akar-icons:calendar"></iconify-icon>
                             <span>Jadwal Kontrol</span>
                         </a>
@@ -48,7 +48,7 @@
                     </li>
 
                     <li class="sidebar-item {{ $title == 'reservasi' ? 'active' : '' }}">
-                        <a href="{{ url('/reservasi') }}" class='sidebar-link'>
+                        <a href="{{ url('/dokter/reservasi') }}" class='sidebar-link'>
                             <iconify-icon icon="akar-icons:schedule"></iconify-icon>
                             <span>Reservasi</span>
                         </a>

@@ -38,4 +38,8 @@ class Dokter extends Authenticatable
     {
         return $this->hasMany(JadwalKontrol::class);
     }
+    public function reservasi()
+    {
+        return $this->hasMany(Reservasi::class);
+    }
 }

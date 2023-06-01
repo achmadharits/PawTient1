@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-@include('partials.sidebar')
+@include('partials.pasien-sidebar')
 
 <div id="main" class='layout-navbar'>
   @include('partials.navbar')
@@ -10,8 +10,15 @@
         <div class="page-title">
           <div class="row mb-4">
             <div class="col-12 col-md-6 order-md-1 order-last">
-              <h3>Daftar Reservasi Pasien</h3>
-              <p>Menampilkan reservasi masuk yang telah dibuat oleh pasien Anda.</p>
+              <h3>Daftar Reservasi</h3>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+              <div class="button">
+                <a href="{{ url('/pasien/reservasi/dokter') }}" class="btn icon icon-left btn-primary">
+                  <iconify-icon icon="akar-icons:plus"></iconify-icon>
+                  Buat Reservasi
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -28,31 +35,29 @@
                 <table class="table table-striped" id="table1">
                     <thead>
                         <tr>
-                            <th data-sortable>Nama Pasien</th>
-                            <th data-sortable>Tanggal Reservasi</th>
+                            <th data-sortable>Nama Dokter</th>
+                            <th data-sortable>Tanggal Jadwal</th>
                             <th data-sortable>Deskripsi</th>
-                            <th>Aksi</th>
+                            <th data-sortable>Status</th>
+                            {{-- <th>Aksi</th> --}}
                         </tr>
                     </thead>
                     <tbody>
                       @foreach ($datas as $data)
                         <tr>
-                            <td>{{ $data->pasien->nama }}</td>
+                            <td>{{ $data->dokter->nama }}</td>
                             <td>{{ $data->tgl_reservasi }}</td>
                             <td>{{ $data->deskripsi }}</td>
+                            <td><span class="badge {{ $data->status === 'Menunggu' ? 'bg-light-warning' : 'bg-light-secondary' }}">{{ $data->status }}</span></td>
                             <td>
-                              <div class="table-action">
-                                {{-- edit --}}
-                                <form action="{{ url('dokter/reservasi/'.$data->id) }}" method="POST">
-                                  @csrf
-                                  <button type="submit" class="btn btn-txt btn-green me-1">
-                                    <div class="d-flex align-items-center justify-content-center">
-                                      <iconify-icon icon="akar-icons:check" class="me-1"></iconify-icon>
-                                      <div class="icon-txt">Setuju</div>
-                                    </div>
-                                  </button>
-                                </form>
-                                {{-- delete --}}
+                              {{-- <div class="table-action">
+                                
+                                <a href="" class="btn btn-txt btn-green me-1 " alt="edit">
+                                  <div class="d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="akar-icons:check" class="me-1"></iconify-icon>
+                                    <div class="icon-txt">Setuju</div>
+                                  </div>
+                                </a>
                                 <form action="" method="POST">
                                   @csrf
                                   <input type="hidden" name="_method" value="DELETE">
@@ -63,7 +68,7 @@
                                     </div>
                                   </button>
                                 </form>
-                              </div>
+                              </div> --}}
                               
                             </td>
                         </tr>
