@@ -48,7 +48,7 @@
                     </li>
 
                     <li class="sidebar-item {{ $title == 'reservasi' ? 'active' : '' }}">
-                        <a href="{{ url('/jadwal') }}" class='sidebar-link'>
+                        <a href="{{ url('/reservasi') }}" class='sidebar-link'>
                             <iconify-icon icon="akar-icons:schedule"></iconify-icon>
                             <span>Reservasi</span>
                         </a>

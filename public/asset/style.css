@@ -239,6 +239,32 @@ button.btn.btn-icon{
   margin-left: -4px;
 }
 
+/* icon with text*/
+.icon-txt{
+  font-size: 14px;
+}
+.btn-txt iconify-icon{
+  font-size: 13px;
+}
+
+/* button color */
+.btn-green{
+  background-color: #7cc554 !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+}
+.btn-green:hover{
+  background-color: #70b34c !important;
+}
+.btn-red{
+  background-color: #fc4f1b !important;
+  color: #fff !important;
+  border-radius: 10px !important;
+}
+.btn-red:hover{
+  background-color: #e04b1e !important;
+}
+
 /* table action */
 td .table-action{
   display: flex !important;

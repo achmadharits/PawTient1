@@ -1,17 +1,17 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\DokterController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\JadwalKontrolController;
-use App\Http\Controllers\JadwalPraktikController;
-use App\Http\Controllers\RekamMedisController;
 use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DokterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\RekamMedisController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\JadwalPraktikController;
+use App\Http\Controllers\Dokter\DokterJadwalKontrolController;
 
 /*
 |--------------------------------------------------------------------------
@@ -55,8 +55,8 @@ Route::name('register.')->group(function (){
     Route::post('/register', [RegisterController::class, 'create'])->name('create');
 });
 
-Route::resource('jadwal-kontrol', JadwalKontrolController::class);
-Route::post('jadwal-kontrol/cancel/{id}', [JadwalKontrolController::class, 'cancelJadwal']);
+Route::resource('jadwal-kontrol', DokterJadwalKontrolController::class);
+Route::post('jadwal-kontrol/cancel/{id}', [DokterJadwalKontrolController::class, 'cancelJadwal']);
 
 Route::resource('jadwal-praktik', JadwalPraktikController::class);
 Route::resource('profil', DokterController::class);
@@ -67,7 +67,11 @@ Route::get('/pasien', function (){
         'title' => 'pasien',
     ]);
 });
-
+Route::get('/reservasi', function (){
+    return view('dokter.reservasi.index', [
+        'title' => 'reservasi',
+    ]);
+});
 
 // Auth::routes();
 

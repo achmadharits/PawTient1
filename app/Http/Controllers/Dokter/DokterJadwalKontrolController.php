@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dokter;
 
+use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\Dokter;
 use App\Models\Pasien;
@@ -11,7 +12,7 @@ use App\Models\JadwalPraktik;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
-class JadwalKontrolController extends Controller
+class DokterJadwalKontrolController extends Controller
 {
     public function getIdJadwal($id)
     {
@@ -45,7 +46,6 @@ class JadwalKontrolController extends Controller
 
         $id = Auth::guard('dokter')->user()->id_dokter;
         $datas = JadwalKontrol::where('id_dokter', $id)->orderBy('tgl_jadwal', 'desc')->get();
-        // $this->updateStatus($datas->tgl_jadwal);
         return view('dokter.jadwal.index', [
             'title' => 'jadwal',
             'datas' => $datas,
@@ -80,7 +80,6 @@ class JadwalKontrolController extends Controller
                 $tgl->hari = 7;
             }
         }
-        // dd($tanggal->pluck('hari'));
         return view('dokter.jadwal.create', [
             'title' => 'jadwal',
             'datas' => $datas,
@@ -240,7 +239,6 @@ class JadwalKontrolController extends Controller
             'message' => $pesan,
             'countryCode' => '62',
         ]);
-
         return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil dibatalkan.');
     }
 
@@ -255,6 +253,5 @@ class JadwalKontrolController extends Controller
         $datas = JadwalKontrol::find($id);
         $datas->delete();
         return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil dihapus.');
-
     }
 }
