@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JadwalKontrol;
+use App\Models\JenisKonsultasi;
 use Illuminate\Http\Request;
 use App\Models\Pasien;
+use App\Models\RekamMedis;
+use Illuminate\Support\Facades\Auth;
 
 class RekamMedisController extends Controller
 {
@@ -14,21 +18,38 @@ class RekamMedisController extends Controller
      */
     public function index()
     {
+        $id = Auth::guard('dokter')->user()->id_dokter;
+        $datas = RekamMedis::where('id_dokter', $id)->get();
         return view('dokter.rekam-medis.index', [
+            'datas' => $datas,
             'title' => 'rekam-medis',
         ]);
     }
 
+    public function viewJadwal()
+    {
+        $id = Auth::guard('dokter')->user()->id_dokter;
+        $datas = JadwalKontrol::where('id_dokter', $id)
+        ->where('status', 'Selesai')
+        ->get();
+
+        return view('dokter.rekam-medis.list-jadwal',[
+            'datas' => $datas,
+            'title' => 'rekam-medis',
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($id)
     {
-        $datas = Pasien::all();
+        $datas = JadwalKontrol::find($id);
+        $jenis = JenisKonsultasi::all();
         return view('dokter.rekam-medis.create', [
             'datas' => $datas,
+            'jenis' => $jenis,
             'title' => 'rekam-medis',
         ]);
     }
@@ -41,7 +62,17 @@ class RekamMedisController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        RekamMedis::create([
+            'id_dokter' => Auth::guard('dokter')->user()->id_dokter,
+            'id_pasien' => $request['id_pasien'],
+            'id_jenis' => $request['id_jenis'],
+            'tgl_konsultasi' => $request['tgl_konsultasi'],
+            'odontogram' => $request['odontogram'],
+            'anamnesis' => $request['anamnesis'],
+            'diagnosis' => $request['diagnosis'],
+            'perawatan' => $request['perawatan'],
+        ]);
+        return redirect('rekam-medis')->withSuccess('Data rekam medis berhasil dibuat.');
     }
 
     /**

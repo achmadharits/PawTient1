@@ -62,6 +62,8 @@ Route::middleware(['auth:dokter'])->group(function () {
     Route::post('jadwal-kontrol/cancel/{id}', [DokterJadwalKontrolController::class, 'cancelJadwal']);
     Route::resource('jadwal-praktik', JadwalPraktikController::class);
     Route::resource('profil', DokterController::class);
+    Route::get('rekam-medis/{id}/create', [RekamMedisController::class, 'create']);
+    Route::get('rekam-medis/jadwal', [RekamMedisController::class, 'viewJadwal']);
     Route::resource('rekam-medis', RekamMedisController::class);
     Route::prefix('dokter')->name('dokter.')->group(function(){
         Route::post('reservasi/{id}', [DokterReservasiController::class, 'saveJadwal']);
