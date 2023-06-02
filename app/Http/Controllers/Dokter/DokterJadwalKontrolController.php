@@ -42,10 +42,19 @@ class DokterJadwalKontrolController extends Controller
     public function index()
     {
         // cek status jadwal
-        JadwalKontrol::where('tgl_jadwal', '<', now()->toDateString())->update(['status' => 'Selesai']);
+        JadwalKontrol::where('tgl_jadwal', '<', now()->toDateString())
+        ->where('status', 'Aktif')
+        ->update(['status' => 'Selesai']);
 
         $id = Auth::guard('dokter')->user()->id_dokter;
-        $datas = JadwalKontrol::where('id_dokter', $id)->orderBy('tgl_jadwal', 'desc')->get();
+        $datas = JadwalKontrol::where('id_dokter', $id)
+        ->orderBy('status')
+        ->orderByRaw("CASE WHEN status = 'Aktif' THEN 0 ELSE 1 END")
+        ->orderByRaw("ABS(DATEDIFF(NOW(), tgl_jadwal))")
+        ->get();
+        // $datas = JadwalKontrol::where('id_dokter', $id)
+        // ->orderBy('status', 'asc')
+        // ->get();
         return view('dokter.jadwal.index', [
             'title' => 'jadwal',
             'datas' => $datas,
