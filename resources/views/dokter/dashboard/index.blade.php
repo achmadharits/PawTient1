@@ -24,7 +24,7 @@
           <div class="row">
             <div class="col-lg-9 col-12">
               <div class="row">
-                <div class="col-md-4 col-lg-4 col-12 col-sm-6">
+                <div class="col-md-6 col-lg-6 col-12 col-sm-6">
                   <div class="card">
                     <div class="card-body px-4 py-4">
                       <div class="row d-flex align-items-center">
@@ -40,7 +40,7 @@
                   </div>
                 </div>
 
-                <div class="col-md-4 col-lg-4 col-12 col-sm-6">
+                <div class="col-md-6 col-lg-6 col-12 col-sm-6">
                   <div class="card">
                     <div class="card-body px-4 py-4">
                       <div class="row d-flex align-items-center">
@@ -49,14 +49,14 @@
                         </div>
                         <div class="col-lg-9 col-md-9 col-sm-9 col-9">
                           <h6 class="text-muted">Reservasi Masuk</h6>
-                          <h6>6</h6>
+                          <h6><a href="{{ url('/dokter/reservasi') }}" class="stretched-link"></a>{{ $reservasi }}</h6>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="col-md-4 col-lg-4 col-12 col-sm-6">
+                {{-- <div class="col-md-4 col-lg-4 col-12 col-sm-6">
                   <div class="card">
                     <div class="card-body px-4 py-4">
                       <div class="row d-flex align-items-center">
@@ -65,12 +65,12 @@
                         </div>
                         <div class="col-lg-9 col-md-9 col-sm-9 col-9">
                           <h6 class="text-muted">Jumlah Pasien</h6>
-                          <h6>10</h6>
+                          <h6>{{ $pasien->count() }}</h6>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> --}}
               </div>
 
               <div class="card">
@@ -97,7 +97,20 @@
                   </div>
                 </div>
                 <div class="card-body">
+                  @foreach ($pasien as $p)
                   <div class="patient-list d-flex align-items-center">
+                    <div class="avatar-img">
+                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
+                    </div>
+                    <div class="avatar-name ms-3">
+                          <h6>{{ $p->nama }}</h6>
+                          <small>{{ $p->email }}</small>
+                    </div>
+                  </div>
+                  @endforeach
+                  
+
+                  {{-- <div class="patient-list d-flex align-items-center">
                     <div class="avatar-img">
                       <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
                     </div>
@@ -135,17 +148,7 @@
                       <h6>Havina Leli</h6>
                       <small>havina@email.com</small>
                     </div>
-                  </div>
-
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
+                  </div> --}}
 
                 </div>
               </div>

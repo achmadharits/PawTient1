@@ -9,23 +9,15 @@
         <div class="page-title">
           <div class="row mb-4">
             <div class="col-12 col-md-6 order-md-1 order-last">
-              <h3>Buat Jadwal Kontrol Baru</h3>
+              <h3>Buat Perizinan Baru</h3>
             </div>
-            {{-- <div class="col-12 col-md-6 order-md-2 order-first">
-              <div class="button">
-                <a href="#" class="btn icon icon-left btn-primary">
-                  <iconify-icon icon="akar-icons:plus"></iconify-icon>
-                  Buat Jadwal
-                </a>
-              </div>
-            </div> --}}
           </div>
         </div>
 
         <section class="section">
           <div class="card">
             <div class="card-body">
-              <form method="POST" action="{{ url('jadwal-kontrol') }}">
+              <form method="POST" action="{{ url('izin') }}">
                 @csrf
                 <div class="create-group">
                   {{-- nama dokter --}}
@@ -34,32 +26,28 @@
                     <input type="text" name="id_dokter" class="form-control" value="{{ Auth::guard('dokter')->user()->id_dokter }}">
                   </div>
   
-                  {{-- nama pasien --}}
+                  {{-- tgl izin --}}
                   <div class="form-group">
-                    <label for="id_pasien">Nama Pasien</label>
-                    <select name="id_pasien" class="form-select @error('id_pasien') is-invalid @enderror" >
-                      <option value="">Pilih Pasien</option>
-                      @foreach ($datas as $data)
-                      <option value="{{ $data->id_pasien }}">{{ $data->nama }}</option>
-                      @endforeach
-                    </select>
-                    @error('id_pasien')
-                    <span class="invalid-feedback role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                    @enderror
-                  </div>
-  
-                  {{-- tgl jadwal --}}
-                  <div class="form-group">
-                    <label for="tgl_jadwal">Tanggal Jadwal</label>
-                    <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror" autocomplete="off" placeholder="YYYY/MM/DD">
-                    @error('tgl_jadwal')
+                    <label for="tgl_izin">Tanggal Izin</label>
+                    <input name="tgl_izin" type="text" id="datepicker" class="form-control @error('tgl_izin') is-invalid @enderror" autocomplete="off" placeholder="YYYY/MM/DD">
+                    @error('tgl_izin')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                     @enderror
                   </div>
+  
+                  {{-- alasan --}}
+                  <div class="form-group">
+                    <label for="alasan">Alasan Izin</label>
+                    <input name="alasan" type="text" id="datepicker" class="form-control @error('alasan') is-invalid @enderror" autocomplete="off">
+                    @error('alasan')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                  </div>
+
                 </div>
   
                 <button type="submit" class="btn btn-primary mt-3">Simpan</button>
@@ -74,26 +62,20 @@
   </div>
   {{-- end of main content --}}
 </div>
-
 <script type="text/javascript">
   $(function () {
     var allowedDays = {{ $tanggal }};
-    var disabledDays = {!! $tgl_izin !!}; // ini gak da d nya
-    console.log(disabledDays);
-
     $("#datepicker").datepicker({
       dateFormat: "yy/mm/dd",
       minDate: 0,
       beforeShowDay: function (date) {
         var day = date.getDay();
-        var tanggal = jQuery.datepicker.formatDate('yy-mm-dd', date);
-        
-        if(disabledDays.includes(tanggal)){ // disini ada ran
-            return [false];
-        } else if(allowedDays.includes(day)){
-          return [true, ""];
-        }else {
-          return [false];
+        if (allowedDays.includes(day)) {
+          return [true, ""]; // tanggal dapat dipilih
+        } else {
+          return [
+            false,
+          ]; // tanggal tidak dapat dipilih
         }
       },
     });

@@ -1,17 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Pasien;
+namespace App\Http\Controllers;
 
+use App\Models\IzinAbsensi;
 use Carbon\Carbon;
-use App\Models\Dokter;
-use App\Models\Reservasi;
 use Illuminate\Http\Request;
 use App\Models\JadwalPraktik;
-use App\Http\Controllers\Controller;
-use App\Models\IzinAbsensi;
 use Illuminate\Support\Facades\Auth;
 
-class PasienReservasiController extends Controller
+class IzinAbsensiController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,37 +17,24 @@ class PasienReservasiController extends Controller
      */
     public function index()
     {
-        //disini langsung nampung id dokter
-        $id = Auth::guard('pasien')->user()->id_pasien;
-        $datas = Reservasi::where('id_pasien', $id)->get();
-        // dd($datas);
-        return view('pasien.reservasi.index', [
-            'title' => 'reservasi',
+        $id = Auth::guard('dokter')->user()->id_dokter;
+        $datas = IzinAbsensi::where('id_dokter', $id)->get();
+        return view('dokter.absensi.index', [
             'datas' => $datas,
+            'title' => 'absensi',
         ]);
+    
     }
 
-    public function viewDokter()
-    {
-        $datas = Dokter::all();
-        return view('pasien.reservasi.list-dokter',[
-            'datas' => $datas,
-            'title' => 'reservasi',
-        ]);
-    }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($id)
+    public function create()
     {
-        // $dokter = Dokter::find($id)->first()->id_dokter;
-        $datas = Dokter::find($id);
-        $tanggal = JadwalPraktik::where('id_dokter', $datas->id_dokter)->get();
-        $tgl_izin = IzinAbsensi::where('id_dokter', $datas->id_dokter)
-        ->where('tgl_izin', '>' ,now()->toDateString())
-        ->pluck('tgl_izin');
+        $id = Auth::guard('dokter')->user()->id_dokter;
+        $tanggal = JadwalPraktik::where('id_dokter', $id)->get();
 
         foreach($tanggal as $tgl){
             if($tgl->hari == "Senin"){
@@ -69,12 +53,9 @@ class PasienReservasiController extends Controller
                 $tgl->hari = 7;
             }
         }
-
-        return view('pasien.reservasi.create', [
-            'title' => 'reservasi',
-            'datas' => $datas,
+        return view('dokter.absensi.create', [
             'tanggal' => $tanggal->pluck('hari'),
-            'tgl_izin' => $tgl_izin,
+            'title' => 'absensi',
         ]);
     }
 
@@ -86,17 +67,12 @@ class PasienReservasiController extends Controller
      */
     public function store(Request $request)
     {
-        // change date format
-        $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_reservasi'])->format('Y-m-d');
-
-        Reservasi::create([
-            'id_dokter' => $request['id_dokter'],
-            'id_pasien' => $request['id_pasien'],
-            'tgl_reservasi' => $newTgl,
-            'deskripsi' => $request['deskripsi'],
-            'status' => 'Menunggu',
+        IzinAbsensi::create([
+            'id_dokter' => $request->id_dokter,
+            'tgl_izin' => $request->tgl_izin,
+            'alasan' => $request->alasan,
         ]);
-        return redirect()->route('pasien.reservasi.index')->withSuccess('Reservasi berhasil dibuat');
+        return redirect('izin')->withSuccess('Perizinan berhasil dibuat');
     }
 
     /**

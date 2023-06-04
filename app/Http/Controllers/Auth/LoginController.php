@@ -42,6 +42,7 @@ class LoginController extends Controller
         }
 
         if (Auth::guard('pasien')->attempt($credentials)) {
+            // dd("masuk sebagai pasie");
             $request->session()->regenerate();
             
             return redirect()->intended('/home');
@@ -63,7 +64,7 @@ class LoginController extends Controller
             // dd("pasien");
             Auth::guard('pasien')->logout();
         } else {
-            dd('gak terdeteksi guardnya');
+            // dd('gak terdeteksi guardnya');
             Auth::logout();
         }
         return redirect('/');

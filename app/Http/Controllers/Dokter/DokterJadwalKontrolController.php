@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Dokter;
 
-use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Models\Dokter;
 use App\Models\Pasien;
+use App\Models\IzinAbsensi;
 use Illuminate\Http\Request;
 use App\Models\JadwalKontrol;
 use App\Models\JadwalPraktik;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -71,6 +72,9 @@ class DokterJadwalKontrolController extends Controller
         $datas = Pasien::all();
         $id = Auth::guard('dokter')->user()->id_dokter;
         $tanggal = JadwalPraktik::where('id_dokter', $id)->get();
+        $tgl_izin = IzinAbsensi::where('id_dokter', $id)
+        ->where('tgl_izin', '>', now()->toDateString())
+        ->pluck('tgl_izin');
 
         foreach($tanggal as $tgl){
             if($tgl->hari == "Senin"){
@@ -93,6 +97,7 @@ class DokterJadwalKontrolController extends Controller
             'title' => 'jadwal',
             'datas' => $datas,
             'tanggal' => $tanggal->pluck('hari'),
+            'tgl_izin' => $tgl_izin,
         ]);
         
     }

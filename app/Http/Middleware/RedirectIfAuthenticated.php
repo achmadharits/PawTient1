@@ -23,7 +23,7 @@ class RedirectIfAuthenticated
         // dd($guards);
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                if($guard == 'pasien'){
+                if($guard == 'pasien'){ // dia ngecek pasien pertama kali
                     return redirect('/home');
                 }else if($guard == 'dokter'){
                     return redirect('/home');
