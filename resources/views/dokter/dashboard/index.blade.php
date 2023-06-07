@@ -22,7 +22,7 @@
 
         <section class="section">
           <div class="row">
-            <div class="col-lg-9 col-12">
+            <div class="col-lg-8 col-12">
               <div class="row">
                 <div class="col-md-6 col-lg-6 col-12 col-sm-6">
                   <div class="card">
@@ -82,7 +82,7 @@
               
             </div>
 
-            <div class="col-lg-3 col-12">
+            <div class="col-lg-4 col-12">
               <div class="card">
                 <div class="card-header">
                   <div class="row">
@@ -90,7 +90,7 @@
                       <h6>Daftar Pasien</h6>
                     </div>
                     <div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex justify-content-end">
-                      <a title="Lihat semua" href="">
+                      <a title="Lihat semua" href="{{ url('pasien') }}">
                         <iconify-icon icon="akar-icons:enlarge" class="secondary"></iconify-icon>
                       </a>
                     </div>

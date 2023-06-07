@@ -54,10 +54,10 @@
                         </a>
                     </li>
                     
-                    <li class="sidebar-item  {{ $title == 'pasien' ? 'active' : '' }}">
-                        <a href="{{ url('/pasien') }}" class='sidebar-link'>
-                            <iconify-icon icon="akar-icons:people-multiple"></iconify-icon>
-                            <span>Pasien</span>
+                    <li class="sidebar-item  {{ $title == 'absensi' ? 'active' : '' }}">
+                        <a href="{{ url('/izin') }}" class='sidebar-link'>
+                            <iconify-icon icon="akar-icons:door"></iconify-icon>
+                            <span>Izin Absensi</span>
                         </a>
                         {{-- <ul class="submenu ">
                             <li class="submenu-item ">

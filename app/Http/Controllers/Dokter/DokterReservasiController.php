@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Reservasi;
 use Illuminate\Http\Request;
 use App\Models\JadwalKontrol;
+use App\Models\JadwalPraktik;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -24,6 +25,11 @@ class DokterReservasiController extends Controller
     {
         Carbon::setLocale('id');
         return Carbon::parse($date)->translatedFormat('l, d F Y');
+    }
+    public function setDay($date)
+    {
+        Carbon::setLocale('id');
+        return Carbon::parse($date)->translatedFormat('l');
     }
     /**
      * Display a listing of the resource.
@@ -58,8 +64,17 @@ class DokterReservasiController extends Controller
             'status' => 'Undelivered',
         ]);
         $datas->update(['status' => 'Disetujui']);
+
+        // get day
+        $hari = $this->setDay($jadwal->tgl_jadwal);
+        $jam = JadwalPraktik::where('id_dokter', $datas->id_dokter)->where('hari', $hari)->first();
+
         // create reminder message
-        $pesan = 'Halo '.$jadwal->pasien->nama.', pengajuan reservasi kontrol dengan drg. '.$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).' telah disetujui.';
+        $pesan = 'Halo '.$jadwal->pasien->nama.'. Pengajuan reservasi untuk melakukan kontrol dengan drg. '
+        .$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).' telah disetujui. Silakan datang pada jam praktik '
+        .$jam->jam_kerja.' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.
+        PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
+        
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
             'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
@@ -74,11 +89,39 @@ class DokterReservasiController extends Controller
             $jadwal->pesan = $pesan;
             $jadwal->status = 'Aktif';
             $jadwal->save(); 
-            return redirect('/dokter/reservasi')->withSuccess('Jadwal berhasil dibuat.');
+            return redirect('/dokter/reservasi')->withSuccess('Reservasi berhasil disetujui.');
         } else {
             return redirect('/dokter/reservasi');
             $errorMessage = $response->body();
         }
+    }
+    public function declineJadwal($id)
+    {
+        $datas = Reservasi::find($id);
+
+        // create announcement message
+        $pesan = 'Halo '.$datas->pasien->nama.'. Kami memohon maaf untuk pengajuan reservasi untuk melakukan kontrol dengan drg. '
+        .$datas->dokter->nama.' pada '.$this->setDate($datas->tgl_reservasi).' kami tolak.'.PHP_EOL.
+        'Silakan mengajukan reservasi kembali di tanggal yang berbeda. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.
+        '*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
+
+        $response = Http::withHeaders([
+            'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
+        ])->post('https://api.fonnte.com/send', [
+            'target' => $datas->pasien->no_hp,
+            'message' => $pesan,
+            'countryCode' => '62',
+        ]);
+        
+        if ($response->ok()) {
+            // $responseData = $response->json();
+            $datas->update(['status' => 'Ditolak']);
+            return redirect('/dokter/reservasi')->withSuccess('Reservasi berhasil ditolak.');
+        } else {
+            return redirect('/dokter/reservasi');
+            $errorMessage = $response->body();
+        }
+
     }
 
     /**

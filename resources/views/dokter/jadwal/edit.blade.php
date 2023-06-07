@@ -75,17 +75,22 @@
 <script type="text/javascript">
   $(function () {
     var allowedDays = {{ $tanggal }};
+    var disabledDays = {!! $tgl_izin !!}; // ini gak da d nya
+    console.log(disabledDays);
+
     $("#datepicker").datepicker({
       dateFormat: "yy/mm/dd",
       minDate: 0,
       beforeShowDay: function (date) {
         var day = date.getDay();
-        if (allowedDays.includes(day)) {
-          return [true, ""]; // tanggal dapat dipilih
-        } else {
-          return [
-            false,
-          ]; // tanggal tidak dapat dipilih
+        var tanggal = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        
+        if(disabledDays.includes(tanggal)){ // disini ada ran
+            return [false];
+        } else if(allowedDays.includes(day)){
+          return [true, ""];
+        }else {
+          return [false];
         }
       },
     });

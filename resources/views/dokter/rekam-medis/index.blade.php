@@ -44,11 +44,13 @@
                     </thead>
                     <tbody>
                       @foreach ($datas as $data)
+                      <tr>
                         <td>{{ $data->pasien->nama }}</td>
                         <td>{{ $data->tgl_konsultasi }}</td>
                         <td>{{ $data->diagnosis }}</td>
                         <td>{{ $data->perawatan }}</td>
                         <td></td>
+                      </tr>
                       @endforeach
                     </tbody>
                 </table>

@@ -53,9 +53,7 @@ class DokterJadwalKontrolController extends Controller
         ->orderByRaw("CASE WHEN status = 'Aktif' THEN 0 ELSE 1 END")
         ->orderByRaw("ABS(DATEDIFF(NOW(), tgl_jadwal))")
         ->get();
-        // $datas = JadwalKontrol::where('id_dokter', $id)
-        // ->orderBy('status', 'asc')
-        // ->get();
+
         return view('dokter.jadwal.index', [
             'title' => 'jadwal',
             'datas' => $datas,
@@ -136,7 +134,12 @@ class DokterJadwalKontrolController extends Controller
         $id = Auth::guard('dokter')->user()->id_dokter;
         $hari = $this->setDay($jadwal->tgl_jadwal);
         $jam = JadwalPraktik::where('id_dokter', $id)->where('hari', $hari)->first();
-        $pesan = 'Halo '.$jadwal->pasien->nama.', kamu ada jadwal melakukan kontrol dengan drg. '.$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).'. Silakan datang ke klinik pada jam praktik '.$jam->jam_kerja.' WIB.';
+
+        $pesan = 'Halo '.$jadwal->pasien->nama.'. Kamu mendapatkan jadwal untuk melakukan kontrol dengan drg. '
+        .$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).'.'.PHP_EOL.'Silakan datang ke klinik pada jam praktik '
+        .$jam->jam_kerja.' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.
+        PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
+
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
             'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
@@ -191,6 +194,10 @@ class DokterJadwalKontrolController extends Controller
         $datas = JadwalKontrol::find($id);
         $id = Auth::guard('dokter')->user()->id_dokter;
         $tanggal = JadwalPraktik::where('id_dokter', $id)->get();
+        $tgl_izin = IzinAbsensi::where('id_dokter', $id)
+        ->where('tgl_izin', '>', now()->toDateString())
+        ->pluck('tgl_izin');
+
         foreach($tanggal as $tgl){
             if($tgl->hari == "Senin"){
                 $tgl->hari = 1;
@@ -213,6 +220,7 @@ class DokterJadwalKontrolController extends Controller
             'title' => 'jadwal',
             'datas' => $datas,
             'tanggal' => $tanggal->pluck('hari'),
+            'tgl_izin' => $tgl_izin,
         ]);
     }
 
@@ -229,22 +237,25 @@ class DokterJadwalKontrolController extends Controller
             'tgl_jadwal' => 'required|date|after:today',
         ]);
         $datas = JadwalKontrol::find($id);
+        $oldTgl = $datas->tgl_jadwal;
 
         // change date format
         $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d');
 
+        // update data
         $datas->tgl_jadwal = $newTgl;
         $datas->save();
-        return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil diubah.');
-    }
-
-    public function cancelJadwal($id)
-    {
-        $datas = JadwalKontrol::find($id);
-        $datas->update(['status' => 'Batal']);
 
         // create reminder message
-        $pesan = 'Halo '.$datas->pasien->nama.', kami memohon maaf untuk jadwal kontrol dengan drg. '.$datas->dokter->nama.' pada '.$this->setDate($datas->tgl_jadwal).' dibatalkan.\nSilakan menunggu jadwal terbaru atau mengajukan reservasi jadwal kepada dokter gigi yang bersangkutan. Terima kasih.';
+        $id = Auth::guard('dokter')->user()->id_dokter;
+        $hari = $this->setDay($datas->tgl_jadwal);
+        $jam = JadwalPraktik::where('id_dokter', $id)->where('hari', $hari)->first();
+
+        $pesan = '*[PEMBERITAHUAN]*'.PHP_EOL.PHP_EOL.'Halo '.$datas->pasien->nama.'. Untuk jadwal kontrol dengan drg. '
+        .$datas->dokter->nama.' yang semula pada '.$this->setDate($oldTgl).', kami ubah menjadi '.'*'.$this->setDate($datas->tgl_jadwal).'*.'.PHP_EOL.PHP_EOL.
+        'Silakan datang ke klinik pada jam praktik '.$jam->jam_kerja.' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.
+        '*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
+
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
             'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
@@ -253,7 +264,46 @@ class DokterJadwalKontrolController extends Controller
             'message' => $pesan,
             'countryCode' => '62',
         ]);
-        return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil dibatalkan.');
+        
+        if ($response->ok()) {
+            // $responseData = $response->json();
+            $datas->pesan = $pesan;
+            $datas->save();
+            return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil diubah.');
+        } else {
+            return redirect('jadwal-kontrol');
+            $errorMessage = $response->body();
+        }
+    }
+
+    public function cancelJadwal($id)
+    {
+        $datas = JadwalKontrol::find($id);
+        $datas->update(['status' => 'Batal']);
+
+        $pesan = '*[PEMBERITAHUAN]*'.PHP_EOL.PHP_EOL.'Halo '.$datas->pasien->nama.'. Kami memohon maaf untuk jadwal kontrol dengan drg. '
+        .$datas->dokter->nama.' pada '.$this->setDate($datas->tgl_jadwal).' kami batalkan.'.PHP_EOL.PHP_EOL.
+        'Silakan menunggu jadwal terbaru atau dapat mengajukan reservasi jadwal kepada dokter gigi yang bersangkutan. Terima kasih.'
+        .PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.
+        'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
+
+        // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
+        $response = Http::withHeaders([
+            'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
+        ])->post('https://api.fonnte.com/send', [
+            'target' => $datas->pasien->no_hp,
+            'message' => $pesan,
+            'countryCode' => '62',
+        ]);
+        if ($response->ok()) {
+            // $responseData = $response->json();
+            $datas->pesan = $pesan;
+            $datas->save();
+            return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil dibatalkan.');
+        } else {
+            return redirect('jadwal-kontrol');
+            $errorMessage = $response->body();
+        }
     }
 
     /**

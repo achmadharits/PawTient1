@@ -77,7 +77,8 @@ Route::middleware('auth:dokter')->group(function () {
     Route::get('rekam-medis/jadwal', [RekamMedisController::class, 'viewJadwal']);
     Route::resource('rekam-medis', RekamMedisController::class);
     Route::prefix('dokter')->name('dokter.')->group(function(){
-        Route::post('reservasi/{id}', [DokterReservasiController::class, 'saveJadwal']);
+        Route::post('reservasi/save/{id}', [DokterReservasiController::class, 'saveJadwal']);
+        Route::post('reservasi/tolak/{id}', [DokterReservasiController::class, 'declineJadwal']);
         Route::resource('reservasi', DokterReservasiController::class);
     });
     Route::resource('izin', IzinAbsensiController::class);

@@ -43,7 +43,7 @@
                             <td>
                               <div class="table-action">
                                 {{-- edit --}}
-                                <form action="{{ url('dokter/reservasi/'.$data->id) }}" method="POST">
+                                <form action="{{ url('dokter/reservasi/save/'.$data->id) }}" method="POST">
                                   @csrf
                                   <button type="submit" class="btn btn-txt btn-green me-1">
                                     <div class="d-flex align-items-center justify-content-center">
@@ -53,9 +53,8 @@
                                   </button>
                                 </form>
                                 {{-- delete --}}
-                                <form action="" method="POST">
+                                <form action="{{ url('dokter/reservasi/tolak/'.$data->id) }}" method="POST">
                                   @csrf
-                                  <input type="hidden" name="_method" value="DELETE">
                                   <button type="submit" class="btn btn-txt btn-red" alt="delete">
                                     <div class="d-flex align-items-center justify-content-center">
                                       <iconify-icon icon="akar-icons:cross" class="me-1"></iconify-icon>

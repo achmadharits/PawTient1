@@ -47,29 +47,35 @@
                         <tr>
                             <td>{{ $data->id_jadwal }}</td>
                             <td>{{ $data->pasien->nama }}</td>
-                            <td>{{ $data->tgl_jadwal }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data->tgl_jadwal)->format('d/m/Y') }}</td>
                             <td>
-                              <span class="badge {{ $data->status === 'Aktif' ? 'bg-light-success' : 'bg-light-secondary' }}">{{ $data->status }}</span>
+                              <span class="badge {{ $data->status == 'Aktif' ? 'bg-light-success' : 'bg-light-secondary' }}">{{ $data->status }}</span>
                             </td>
                             <td>
                               <div class="table-action">
                                 {{-- edit --}}
-                                <a href="{{ url('jadwal-kontrol/'.$data->id_jadwal.'/edit') }}" class="btn icon btn-icon me-1 {{ $data->status === 'Selesai' || $data->status === 'Batal' ? 'd-none' : '' }}" alt="edit">
-                                  <iconify-icon icon="akar-icons:pencil" data-align="center"></iconify-icon>
+                                <a href="{{ url('jadwal-kontrol/'.$data->id_jadwal.'/edit') }}" class="btn btn-txt btn-grey me-1 {{ $data->status == 'Selesai' || $data->status == 'Batal' || $data->status == 'Aktif' && $data->tgl_jadwal == now()->toDateString() ? 'd-none' : '' }}" alt="edit">
+                                  <div class="d-flex align-items-center justify-content-center">
+                                    <iconify-icon icon="akar-icons:pencil" class="me-1" data-align="center"></iconify-icon>
+                                    <div class="icon-txt">Edit</div>
+                                  </div>
                                 </a>
                                 {{-- delete --}}
-                                <form action="{{ url('jadwal-kontrol/'.$data->id_jadwal) }}" method="POST">
+                                {{-- <form action="{{ url('jadwal-kontrol/'.$data->id_jadwal) }}" method="POST">
                                   @csrf
                                   <input type="hidden" name="_method" value="DELETE">
                                   <button type="submit" class="btn icon btn-icon me-1 {{ $data->status === 'Selesai' || $data->status === 'Batal' ? 'd-none' : '' }}" alt="delete">
                                     <iconify-icon icon="akar-icons:trash-can"></iconify-icon>
                                   </button>
-                                </form>
+                                </form> --}}
                                 {{-- cancel --}}
                                 <form action="{{ url('jadwal-kontrol/cancel/'.$data->id_jadwal) }}" method="POST">
                                   @csrf
-                                  <button type="submit" class="btn icon btn-icon {{ $data->tgl_jadwal === now()->toDateString() && $data->status === 'Aktif' ? '' : 'd-none' }}" alt="batal">
-                                    <iconify-icon icon="akar-icons:cross"></iconify-icon>
+                                  <button type="submit" class="btn btn-txt btn-grey {{ $data->tgl_jadwal === now()->toDateString() && $data->status === 'Aktif' ? '' : 'd-none' }}" alt="batalkan jadwal">
+                                    <div class="d-flex align-items-center justify-content-center">
+                                      <iconify-icon icon="akar-icons:cross" class="me-1"></iconify-icon>
+                                      <div class="icon-txt">Batal</div>
+                                    </div>
                                   </button>
                                 </form>
                               </div>

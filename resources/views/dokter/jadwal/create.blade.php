@@ -78,7 +78,7 @@
 <script type="text/javascript">
   $(function () {
     var allowedDays = {{ $tanggal }};
-    var disabledDays = {!! $tgl_izin !!}; // ini gak da d nya
+    var disabledDays = {!! $tgl_izin !!};
     console.log(disabledDays);
 
     $("#datepicker").datepicker({
@@ -88,7 +88,7 @@
         var day = date.getDay();
         var tanggal = jQuery.datepicker.formatDate('yy-mm-dd', date);
         
-        if(disabledDays.includes(tanggal)){ // disini ada ran
+        if(disabledDays.includes(tanggal)){
             return [false];
         } else if(allowedDays.includes(day)){
           return [true, ""];

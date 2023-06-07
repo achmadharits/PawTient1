@@ -272,6 +272,14 @@ button.btn.btn-icon{
 .btn-purple:hover{
   background-color: #40477c !important;
 }
+.btn-grey{
+  background-color: #DDE2EC !important;
+  color: #606D93 !important;
+  border-radius: 10px !important;
+}
+.btn-grey:hover{
+  background-color: #cfd5e0 !important;
+}
 
 /* table action */
 td .table-action{
