@@ -14,4 +14,8 @@ class JadwalPraktik extends Model
         'hari',
         'jam_kerja',
     ];
+    public function dokter()
+    {
+        return $this->belongsTo(Dokter::class);
+    }
 }

@@ -86,11 +86,7 @@ Route::middleware('auth:dokter')->group(function () {
 
 
 
-Route::get('/list', function (){
-    return view('pasien.reservasi.list-dokter', [
-        'title' => 'reservasi',
-    ]);
-});
+
 // Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->middleware('auth:pasien,dokter');  // ini kan middlewarenya pertama kali pengecekan ke dokter

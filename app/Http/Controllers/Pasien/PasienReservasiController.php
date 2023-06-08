@@ -33,9 +33,15 @@ class PasienReservasiController extends Controller
     public function viewDokter()
     {
         $datas = Dokter::all();
+        $jadwal = JadwalPraktik::all();
+        // $datas = Dokter::join('jadwalpraktik', 'dokter.dokter_id', '=', 'jadwalpraktik.dokter_id')
+        // ->get(['dokter.nama', 'dokter.id_dokter', 'jadwalpraktik.hari', 'jadwalpraktik.jam_kerja']);
+        // dd(isset($datas[1]->jadwalPraktik->tanggal));
+
         return view('pasien.reservasi.list-dokter',[
             'datas' => $datas,
             'title' => 'reservasi',
+            'jadwal' => $jadwal,
         ]);
     }
     /**

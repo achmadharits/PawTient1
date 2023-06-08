@@ -38,7 +38,12 @@
                             </div>
                             <div class="user-img d-flex align-items-center">
                                 <div class="avatar avatar-md">
+                                    @auth('dokter')
                                     <img src="{{ asset('asset/img/doc.png') }}">
+                                    @endauth
+                                    @auth('pasien')
+                                    <img src="{{ asset('asset/img/patient-male.png') }}">
+                                    @endauth
                                 </div>
                             </div>
                         </div>

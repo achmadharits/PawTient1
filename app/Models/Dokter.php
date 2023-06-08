@@ -50,5 +50,8 @@ class Dokter extends Authenticatable
     {
         return $this->hasMany(IzinAbsensi::class);
     }
-    
+    public function jadwalPraktik()
+    {
+        return $this->hasMany(JadwalPraktik::class, 'id_dokter', 'id_dokter');
+    }
 }

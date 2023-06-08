@@ -22,9 +22,9 @@
 
         <section class="section">
           <div class="row">
-            <div class="col-lg-9 col-12">
+            <div class="col-lg-7 col-12">
               <div class="row">
-                <div class="col-md-4 col-lg-4 col-12 col-sm-6">
+                <div class="col-md-6 col-lg-6 col-12 col-sm-6">
                   <div class="card">
                     <div class="card-body px-4 py-4">
                       <div class="row d-flex align-items-center">
@@ -33,14 +33,14 @@
                         </div>
                         <div class="col-lg-9 col-md-9 col-sm-9 col-9">
                           <h6 class="text-muted">Jadwal Aktif</h6>
-                          <h6><a href="#" class="stretched-link"></a>3</h6>
+                          <h6><a href="#" class="stretched-link"></a>{{ $jadwal }}</h6>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="col-md-4 col-lg-4 col-12 col-sm-6">
+                <div class="col-md-6 col-lg-6 col-12 col-sm-6">
                   <div class="card">
                     <div class="card-body px-4 py-4">
                       <div class="row d-flex align-items-center">
@@ -48,105 +48,76 @@
                           <iconify-icon class="stat-icon" icon="akar-icons:schedule"></iconify-icon>
                         </div>
                         <div class="col-lg-9 col-md-9 col-sm-9 col-9">
-                          <h6 class="text-muted">Reservasi Masuk</h6>
-                          <h6>6</h6>
+                          <h6 class="text-muted">Reservasi Menunggu</h6>
+                          <h6><a href="{{ url('pasien/reservasi') }}" class="stretched-link"></a>{{ $reservasi }}</h6>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="col-md-4 col-lg-4 col-12 col-sm-6">
-                  <div class="card">
-                    <div class="card-body px-4 py-4">
-                      <div class="row d-flex align-items-center">
-                        <div class="col-lg-3 col-md-3 col-sm-3 col-3 d-flex justify-content-center align-items-center">
-                          <iconify-icon class="stat-icon" icon="akar-icons:people-group"></iconify-icon>
-                        </div>
-                        <div class="col-lg-9 col-md-9 col-sm-9 col-9">
-                          <h6 class="text-muted">Jumlah Pasien</h6>
-                          <h6>10</h6>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
 
-              <div class="card">
-                <div class="card-body">
-                    <h5>Ini adalah dashboard pasien</h5>
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam dolores, dolorum exercitationem ea dolore nam laboriosam quia sequi suscipit quas saepe harum fugit dicta! Nemo sed quisquam incidunt aspernatur officia.</p>
+              <div class="card" style="height: 294px">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-7 col-7">
+                      <h5>Jadwal yang Akan Datang</h5>
+                    </div>
+                    {{-- <div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex justify-content-end">
+                      <a title="Lihat semua" href="#">
+                        <iconify-icon icon="akar-icons:enlarge" class="secondary"></iconify-icon>
+                      </a>
+                    </div> --}}
+                  </div>
+                </div>
+                <div class="card-body list-jadwal">
+                    <table class="table thead-dark">
+                      <tr>
+                        <th>Nama Dokter</th>
+                        <th>Tanggal Jadwal</th>
+                        {{-- <th>Waktu</th> --}}
+                      </tr>
+                      @foreach ($datas as $data)
+                      <tr>
+                        <td>{{ $data->dokter->nama }}</td>
+                        <td>{{ \Carbon\Carbon::parse($data->tgl_jadwal)->translatedFormat('l, d F y') }}</td>
+                      </tr>
+                      @endforeach
+                    </table>
                 </div>
               </div>
               
             </div>
 
-            <div class="col-lg-3 col-12">
-              <div class="card">
+            <div class="col-lg-5 col-12">
+              <div class="card" style="height: 435px">
                 <div class="card-header">
                   <div class="row">
                     <div class="col-lg-7 col-md-7 col-sm-7 col-7">
-                      <h6>Daftar Pasien</h6>
+                      <h5>Riwayat Jadwal</h5>
                     </div>
-                    <div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex justify-content-end">
-                      <a title="Lihat semua" href="">
+                    {{-- <div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex justify-content-end">
+                      <a title="Lihat semua" href="{{ url('/pasien') }}">
                         <iconify-icon icon="akar-icons:enlarge" class="secondary"></iconify-icon>
                       </a>
-                    </div>
+                    </div> --}}
+                    <small>Menampilkan data riwayat jadwal kontrol Anda yang telah selesai.</small>
                   </div>
                 </div>
-                <div class="card-body">
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
-
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
-
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
-
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
-
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
-
+                <div class="card-body list-jadwal">
+                  <table class="table table-striped">
+                    <tr>
+                      <th>Nama Dokter</th>
+                      <th>Tanggal Jadwal</th>
+                    </tr>
+                    @foreach ($riwayat as $r)
+                    <tr>
+                      <td>{{ $r->dokter->nama }}</td>
+                      <td>{{ \Carbon\Carbon::parse($r->tgl_jadwal)->translatedFormat('l, d F y') }}</td>
+                    </tr>
+                    @endforeach
+                  </table>
                 </div>
               </div>
             </div>
