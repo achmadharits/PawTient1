@@ -9,7 +9,7 @@
         <div class="page-title">
           <div class="row mb-4">
             <div class="col-12 col-md-6 order-md-1 order-last">
-              <h3>Edit Jadwal Kontrol</h3>
+              <h3>Edit Jadwal Praktik</h3>
             </div>
             {{-- <div class="col-12 col-md-6 order-md-2 order-first">
               <div class="button">
@@ -54,11 +54,21 @@
                     <label for="jam_kerja">Jam Kerja</label>
                     <div class="row">
                       <div class="col-5">
-                        <input name="jam_kerja1" type="time" class="form-control" value="{{ substr($datas->jam_kerja, 0, 5) }}">
+                        <input name="jam_kerja1" type="time" class="form-control @error('jam_kerja1') is-invalid @enderror" value="{{ substr($datas->jam_kerja, 0, 5) }}">
+                        @error('jam_kerja1')
+                        <span class="invalid-feedback role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
                       </div>
                       <div class="col-1 text-center">hingga</div>
                       <div class="col-5">
-                        <input name="jam_kerja2" type="time" class="form-control" value="{{ substr($datas->jam_kerja, 8, 5) }}">
+                        <input name="jam_kerja2" type="time" class="form-control @error('jam_kerja2') is-invalid @enderror" value="{{ substr($datas->jam_kerja, 8, 5) }}">
+                        @error('jam_kerja2')
+                        <span class="invalid-feedback role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
                       </div>
                     </div>
                   </div>

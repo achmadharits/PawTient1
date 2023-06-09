@@ -62,6 +62,13 @@ class RekamMedisController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'id_jenis' => 'not_in:null',
+            'odontogram' => 'required',
+            'anamnesis' => 'required',
+            'diagnosis' => 'required',
+            'perawatan' => 'required',
+        ]);
         RekamMedis::create([
             'id_dokter' => Auth::guard('dokter')->user()->id_dokter,
             'id_pasien' => $request['id_pasien'],

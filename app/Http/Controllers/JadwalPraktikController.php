@@ -46,7 +46,8 @@ class JadwalPraktikController extends Controller
     {
         $request->validate([
             'hari' => 'required|not_in:null',
-            // 'jam_kerja' => 'required',
+            'jam_kerja1' => 'required',
+            'jam_kerja2' => 'required',
         ]);
 
         $jamKerja = $request['jam_kerja1']." - ".$request['jam_kerja2'];
@@ -96,6 +97,11 @@ class JadwalPraktikController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->validate($request, [
+            'hari' => 'required|not_in:null',
+            'jam_kerja1' => 'required',
+            'jam_kerja2' => 'required',
+        ]);
         $datas = JadwalPraktik::find($id);
         $jamKerja = $request['jam_kerja1']." - ".$request['jam_kerja2'];
 

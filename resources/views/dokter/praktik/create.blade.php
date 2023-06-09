@@ -51,11 +51,21 @@
                     <label for="jam_kerja">Jam Kerja</label>
                     <div class="row">
                       <div class="col-5">
-                        <input name="jam_kerja1" type="time" class="form-control">
+                        <input name="jam_kerja1" type="time" class="form-control @error('jam_kerja1') is-invalid @enderror">
+                        @error('jam_kerja1')
+                        <span class="invalid-feedback role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
                       </div>
                       <div class="col-1 text-center">hingga</div>
                       <div class="col-5">
-                        <input name="jam_kerja2" type="time" class="form-control">
+                        <input name="jam_kerja2" type="time" class="form-control @error('jam_kerja2') is-invalid @enderror">
+                        @error('jam_kerja2')
+                        <span class="invalid-feedback role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
                       </div>
                     </div>
                   </div>

@@ -18,7 +18,9 @@ class IzinAbsensiController extends Controller
     public function index()
     {
         $id = Auth::guard('dokter')->user()->id_dokter;
-        $datas = IzinAbsensi::where('id_dokter', $id)->get();
+        $datas = IzinAbsensi::where('id_dokter', $id)
+        ->orderBy('tgl_izin', 'asc')
+        ->get();
         return view('dokter.absensi.index', [
             'datas' => $datas,
             'title' => 'absensi',
@@ -67,6 +69,11 @@ class IzinAbsensiController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'tgl_izin' => 'required|date',
+            'alasan' => 'required',
+        ]);
+
         IzinAbsensi::create([
             'id_dokter' => $request->id_dokter,
             'tgl_izin' => $request->tgl_izin,
@@ -117,6 +124,8 @@ class IzinAbsensiController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $datas = IzinAbsensi::find($id);
+        $datas->delete();
+        return redirect('izin')->withSuccess('Data perizinan berhasil dihapus.');
     }
 }

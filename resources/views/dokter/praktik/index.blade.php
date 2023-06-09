@@ -48,15 +48,21 @@
                             <td>
                               <div class="table-action">
                                 {{-- edit --}}
-                                <a href="{{ url('jadwal-praktik/'.$data->id.'/edit') }}" class="btn icon btn-icon me-1" alt="edit">
-                                  <iconify-icon icon="akar-icons:pencil" data-align="center"></iconify-icon>
+                                <a href="{{ url('jadwal-praktik/'.$data->id.'/edit') }}" class="btn btn-txt btn-grey me-1" alt="edit">
+                                  <div class="d-flex align-items-center">
+                                    <iconify-icon icon="akar-icons:pencil" class="me-1"></iconify-icon>
+                                    <div class="icon-txt">Edit</div>
+                                  </div>
                                 </a>
                                 {{-- delete --}}
                                 <form action="{{ url('jadwal-praktik/'.$data->id) }}" method="POST">
                                   @csrf
                                   <input type="hidden" name="_method" value="DELETE">
-                                  <button type="submit" class="btn icon btn-icon" alt="delete">
-                                    <iconify-icon icon="akar-icons:trash-can"></iconify-icon>
+                                  <button type="submit" class="btn btn-txt btn-grey" alt="delete">
+                                    <div class="d-flex align-items-center">
+                                      <iconify-icon icon="akar-icons:trash-can" class="me-1"></iconify-icon>
+                                      <div class="icon-txt">Hapus</div>
+                                    </div>
                                   </button>
                                 </form>
                               </div>

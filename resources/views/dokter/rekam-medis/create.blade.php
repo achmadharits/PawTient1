@@ -75,12 +75,17 @@
                     {{-- input diagnosis --}}
                     <div class="form-group">
                       <label for="diagnosis">Diagnosis</label>
-                      <input type="text" class="form-control" name="diagnosis">
+                      <input type="text" class="form-control @error('diagnosis') is-invalid @enderror" name="diagnosis">
+                      @error('diagnosis')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                      @enderror
                     </div>
                     {{-- input perawatan --}}
                     <div class="form-group">
                       <label for="perawatan">Tindakan Perawatan</label>
-                      <input type="text" class="form-control" name="perawatan">
+                      <input type="text" class="form-control @error('perawatan') is-invalid @enderror" name="perawatan">
                       @error('perawatan')
                       <span class="invalid-feedback" role="alert">
                           <strong>{{ $message }}</strong>

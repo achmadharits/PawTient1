@@ -92,6 +92,10 @@ class PasienReservasiController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'deskripsi' => 'required',
+            'tgl_reservasi' => 'required|date'
+        ]);
         // change date format
         $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_reservasi'])->format('Y-m-d');
 
