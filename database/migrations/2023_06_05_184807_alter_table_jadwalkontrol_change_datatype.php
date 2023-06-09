@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('dokter', function (Blueprint $table) {
-            
+        Schema::table('jadwalkontrol', function (Blueprint $table) {
+            $table->longText('pesan')->change();
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('dokter', function (Blueprint $table) {
-            //
+        Schema::table('jadwalkontrol', function (Blueprint $table) {
+            $table->string('pesan')->change();
         });
     }
 };

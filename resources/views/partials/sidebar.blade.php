@@ -33,52 +33,75 @@
                     </li>
                     
                     <li class="sidebar-item has-sub {{ $title == 'jadwal' ? 'active' : '' }}">
-                        <a href="{{ url('/jadwal') }}" class='sidebar-link'>
+                        <a href="{{ url('/jadwal-kontrol') }}" class='sidebar-link'>
                             <iconify-icon icon="akar-icons:calendar"></iconify-icon>
                             <span>Jadwal Kontrol</span>
                         </a>
                         <ul class="submenu ">
                             <li class="submenu-item ">
-                                <a href="{{ url('/jadwal') }}">Lihat Jadwal</a>
+                                <a href="{{ url('/jadwal-kontrol') }}">Lihat Jadwal</a>
                             </li>
                             <li class="submenu-item ">
-                                <a href="{{ url('/jadwal/create') }}">Buat Jadwal</a>
+                                <a href="{{ url('/jadwal-kontrol/create') }}">Buat Jadwal</a>
                             </li>
                         </ul>
                     </li>
-                    
-                    <li class="sidebar-item  has-sub">
-                        <a href="#" class='sidebar-link'>
-                            <iconify-icon icon="akar-icons:people-multiple"></iconify-icon>
-                            <span>Pasien</span>
+
+                    <li class="sidebar-item {{ $title == 'reservasi' ? 'active' : '' }}">
+                        <a href="{{ url('/dokter/reservasi') }}" class='sidebar-link'>
+                            <iconify-icon icon="akar-icons:schedule"></iconify-icon>
+                            <span>Reservasi</span>
                         </a>
-                        <ul class="submenu ">
+                    </li>
+                    
+                    <li class="sidebar-item  {{ $title == 'absensi' ? 'active' : '' }}">
+                        <a href="{{ url('/izin') }}" class='sidebar-link'>
+                            <iconify-icon icon="akar-icons:door"></iconify-icon>
+                            <span>Izin Absensi</span>
+                        </a>
+                        {{-- <ul class="submenu ">
                             <li class="submenu-item ">
                                 <a href="extra-component-avatar.html">Avatar</a>
                             </li>
                             <li class="submenu-item ">
                                 <a href="extra-component-sweetalert.html">Sweet Alert</a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </li>
                 
-                    <li class="sidebar-item has-sub">
-                        <a href="#" class='sidebar-link'>
+                    <li class="sidebar-item {{ $title == 'rekam-medis' ? 'active' : '' }}">
+                        <a href="{{ url('/rekam-medis') }}" class='sidebar-link'>
                             <iconify-icon icon="akar-icons:paper"></iconify-icon>
                             <span>Rekam Medis</span>
                         </a>
-                        <ul class="submenu">
+                        {{-- <ul class="submenu">
                             <li class="submenu-item ">
-                                <a href="layout-default.html">Default Layout</a>
+                                <a href="{{ url('/rekam-medis') }}">Daftar Rekam Medis</a>
                             </li>
                             <li class="submenu-item ">
-                                <a href="layout-vertical-1-column.html">1 Column</a>
+                                <a href="layout-vertical-1-column.html">Buat Rekam Medis</a>
                             </li>
-                        </ul>
+                        </ul> --}}
                     </li>
+
+                    <li class="sidebar-title">Pengaturan</li>
+                    
+                    <li class="sidebar-item {{ $title == 'praktik' ? 'active' : '' }}">
+                        <a href="{{ url('/jadwal-praktik') }}" class='sidebar-link'>
+                            <iconify-icon icon="akar-icons:dental"></iconify-icon>
+                            <span>Jadwal Praktik</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="{{ route('auth.logout') }}" class='sidebar-link'>
+                            <iconify-icon icon="akar-icons:sign-out"></iconify-icon>
+                            <span>Keluar</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
-            <div class="sidebar-footer mt-auto">
+            {{-- <div class="sidebar-footer mt-auto">
                 <ul class="menu menu-logout">
                     <li class="sidebar-item">
                         <a href="{{ route('auth.logout') }}" class='sidebar-link'>
@@ -87,7 +110,7 @@
                         </a>
                     </li>
                 </ul>
-            </div>
+            </div> --}}
         </div>
     </div>
 </div>

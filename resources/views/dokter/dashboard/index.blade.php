@@ -2,58 +2,7 @@
 @section('content')
 @include('partials.sidebar')
 <div id="main" class='layout-navbar'>
-  {{-- navbar --}}
-  <header class='mb-3'>
-      <nav class="navbar navbar-expand navbar-light navbar-top">
-          <div class="container-fluid">
-              <a href="#" class="burger-btn d-block">
-                  <iconify-icon icon="akar-icons:text-align-justified"></iconify-icon>
-              </a>
-
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                  aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <div class="dropdown ms-auto">
-                      <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                          <div class="user-menu d-flex">
-                              <div class="user-name text-end me-3">
-                                  <h6 class="mb-0 text-gray-600">{{ Auth::guard('dokter')->user()->nama }}</h6>
-                                  <p class="mb-0 text-sm text-gray-600">Dokter Gigi</p>
-                              </div>
-                              <div class="user-img d-flex align-items-center">
-                                  <div class="avatar avatar-md">
-                                      <img src="{{ asset('asset/img/doc.png') }}">
-                                  </div>
-                              </div>
-                          </div>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem;">
-                          <li>
-                              <h6 class="dropdown-header">Menu</h6>
-                          </li>
-                          <li>
-                              <a class="dropdown-item" href="{{ url('/profil') }}">
-                                  Edit Profil
-                              </a>
-                          </li>
-                              <hr class="dropdown-divider">
-                          </li>
-                          <li>
-                              <a class="dropdown-item" href="{{ route('auth.logout') }}">
-                                  Keluar
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-    </nav>
-</header>
-{{-- end of navbar --}}
-
+    @include('partials.navbar')
   {{-- main content --}}
   <div id="main-content">
       <div class="page-heading">
@@ -72,12 +21,145 @@
         </div>
 
         <section class="section">
-          <div class="card">
-            <div class="card-body">
-                <h5>Ini adalah dashboard dokter gigi</h5>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officiis nobis eius distinctio quisquam doloremque atque dignissimos, iure quae fugit tempore eum hic accusamus a provident, sint asperiores cupiditate? Reiciendis, eius!</p>
+          <div class="row">
+            <div class="col-lg-8 col-12">
+              <div class="row">
+                <div class="col-md-6 col-lg-6 col-12 col-sm-6">
+                  <div class="card">
+                    <div class="card-body px-4 py-4">
+                      <div class="row d-flex align-items-center">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-3 d-flex justify-content-center align-items-center">
+                          <iconify-icon class="stat-icon" icon="akar-icons:calendar"></iconify-icon>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-9">
+                          <h6 class="text-muted">Jadwal Aktif</h6>
+                          <h6><a href="{{ url('/jadwal-kontrol') }}" class="stretched-link"></a>{{ $jadwal }}</h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-lg-6 col-12 col-sm-6">
+                  <div class="card">
+                    <div class="card-body px-4 py-4">
+                      <div class="row d-flex align-items-center">
+                        <div class="col-lg-3 col-md-3 col-sm-3 col-3 d-flex justify-content-center align-items-center">
+                          <iconify-icon class="stat-icon" icon="akar-icons:schedule"></iconify-icon>
+                        </div>
+                        <div class="col-lg-9 col-md-9 col-sm-9 col-9">
+                          <h6 class="text-muted">Reservasi Masuk</h6>
+                          <h6><a href="{{ url('/dokter/reservasi') }}" class="stretched-link"></a>{{ $reservasi }}</h6>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-7 col-7">
+                      <h5>Jadwal Praktik</h5>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex justify-content-end">
+                      <a title="Lihat semua" href="{{ url('/jadwal-praktik') }}">
+                        <iconify-icon icon="akar-icons:enlarge" class="secondary"></iconify-icon>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="d-flex list-jadwal">
+                    @foreach ($praktik as $p)
+                    <div class="list-card mb-3">
+                      <div class="list-card-body">
+                        <h6>{{ $p->hari }}</h6>
+                        <small>{{ $p->jam_kerja }}</small>
+                      </div>
+                    </div>
+                    @endforeach
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+            <div class="col-lg-4 col-12">
+              <div class="card">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-lg-7 col-md-7 col-sm-7 col-7">
+                      <h6>Daftar Pasien</h6>
+                    </div>
+                    <div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex justify-content-end">
+                      <a title="Lihat semua" href="{{ url('pasien') }}">
+                        <iconify-icon icon="akar-icons:enlarge" class="secondary"></iconify-icon>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  @foreach ($pasien as $p)
+                  <div class="patient-list d-flex align-items-center">
+                    <div class="avatar-img">
+                      <img src="{{ asset('asset/img/patient-male.png') }}" alt="">
+                    </div>
+                    <div class="avatar-name ms-3">
+                          <h6>{{ $p->nama }}</h6>
+                          <small>{{ $p->email }}</small>
+                    </div>
+                  </div>
+                  @endforeach
+                  
+
+                  {{-- <div class="patient-list d-flex align-items-center">
+                    <div class="avatar-img">
+                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
+                    </div>
+                    <div class="avatar-name ms-4">
+                      <h6>Havina Leli</h6>
+                      <small>havina@email.com</small>
+                    </div>
+                  </div>
+
+                  <div class="patient-list d-flex align-items-center">
+                    <div class="avatar-img">
+                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
+                    </div>
+                    <div class="avatar-name ms-4">
+                      <h6>Havina Leli</h6>
+                      <small>havina@email.com</small>
+                    </div>
+                  </div>
+
+                  <div class="patient-list d-flex align-items-center">
+                    <div class="avatar-img">
+                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
+                    </div>
+                    <div class="avatar-name ms-4">
+                      <h6>Havina Leli</h6>
+                      <small>havina@email.com</small>
+                    </div>
+                  </div>
+
+                  <div class="patient-list d-flex align-items-center">
+                    <div class="avatar-img">
+                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
+                    </div>
+                    <div class="avatar-name ms-4">
+                      <h6>Havina Leli</h6>
+                      <small>havina@email.com</small>
+                    </div>
+                  </div> --}}
+
+                </div>
+              </div>
             </div>
           </div>
+          
+          
         </section>
       </div>
   </div>

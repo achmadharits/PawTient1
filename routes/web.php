@@ -1,15 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\DokterController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\JadwalKontrolController;
 use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\DokterController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\RekamMedisController;
+use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\JadwalPraktikController;
+use App\Http\Controllers\Dokter\DokterJadwalKontrolController;
+use App\Http\Controllers\Dokter\DokterReservasiController;
+use App\Http\Controllers\IzinAbsensiController;
+use App\Http\Controllers\ListPasienController;
+use App\Http\Controllers\Pasien\PasienReservasiController;
+use App\Http\Controllers\ProfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,13 +60,41 @@ Route::name('register.')->group(function (){
     Route::post('/register', [RegisterController::class, 'create'])->name('create');
 });
 
-Route::resource('jadwal', JadwalKontrolController::class);
-Route::resource('profil', DokterController::class);
+// route pasien
+Route::prefix('pasien')->name('pasien.')->middleware('auth:pasien')->group(function(){
+    Route::get('reservasi/dokter', [PasienReservasiController::class, 'viewDokter'])->name('dokter');
+    Route::get('reservasi/{id}/create', [PasienReservasiController::class, 'create']);
+    Route::resource('reservasi', PasienReservasiController::class)->except(['create']);
+});
+
+
+Route::middleware('auth:dokter')->group(function () {
+    Route::resource('jadwal-kontrol', DokterJadwalKontrolController::class);
+    Route::post('jadwal-kontrol/cancel/{id}', [DokterJadwalKontrolController::class, 'cancelJadwal']);
+    Route::resource('jadwal-praktik', JadwalPraktikController::class);
+    Route::resource('pasien', ListPasienController::class);
+    Route::get('rekam-medis/{id}/create', [RekamMedisController::class, 'create']);
+    Route::get('rekam-medis/jadwal', [RekamMedisController::class, 'viewJadwal']);
+    Route::resource('rekam-medis', RekamMedisController::class);
+    Route::prefix('dokter')->name('dokter.')->group(function(){
+        Route::post('reservasi/save/{id}', [DokterReservasiController::class, 'saveJadwal']);
+        Route::post('reservasi/tolak/{id}', [DokterReservasiController::class, 'declineJadwal']);
+        Route::resource('reservasi', DokterReservasiController::class);
+    });
+    Route::resource('izin', IzinAbsensiController::class);
+});
+
+// edit profile
+Route::resource('profil', ProfilController::class)->middleware('auth:pasien,dokter');
+
+
 
 
 // Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])->middleware('auth:dokter,pasien');
+Route::get('/home', [HomeController::class, 'index'])->middleware('auth:pasien,dokter');  // ini kan middlewarenya pertama kali pengecekan ke dokter
+//sedangkan di middleware yang pertama kali dia itu ngecek pasien
+// jadi urutannya harus sesuai yaitu pasien dulu baru dokter
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 

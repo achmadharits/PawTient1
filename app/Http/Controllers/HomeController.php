@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Dokter;
 use App\Models\Pasien;
+use App\Models\Reservasi;
+use Illuminate\Http\Request;
+use App\Models\JadwalKontrol;
+use App\Models\JadwalPraktik;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,13 +28,48 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    public function setDate($date)
+    {
+        Carbon::setLocale('id');
+        return Carbon::parse($date)->translatedFormat('l, d F Y');
+    }
     public function index()
     {
-        $datas = Dokter::all();
+        if(Auth::guard('dokter')->check()){
+            $id = Auth::guard('dokter')->user()->id_dokter;
+            $datas = Dokter::all();
+            $pasien = Pasien::limit(5)->get();
+            $jadwal = JadwalKontrol::where('id_dokter', $id)->where('status', 'Aktif')->count();
+            $reservasi = Reservasi::where('id_dokter', $id)->where('status', 'Menunggu')->count();
+            $praktik = JadwalPraktik::where('id_dokter', $id)->get();
+            return view('dokter.dashboard.index', [
+                'datas' => $datas,
+                'praktik' => $praktik,
+                'title' => 'home',
+                'jadwal' => $jadwal,
+                'reservasi' => $reservasi,
+                'pasien' => $pasien,
+            ]);
+        }elseif(Auth::guard('pasien')->check()){
+            $id = Auth::guard('pasien')->user()->id_pasien;
+            $datas = JadwalKontrol::where('id_pasien', $id)
+            ->where('status', 'Aktif')
+            ->orderBy('tgl_jadwal', 'asc')
+            ->get();
+            $riwayat = JadwalKontrol::where('id_pasien', $id)
+            ->where('status', 'Selesai')
+            ->get();
+            
+            $jadwal = JadwalKontrol::where('id_pasien', $id)->where('status', 'Aktif')->count();
+            $reservasi = Reservasi::where('id_pasien', $id)->where('status', 'Menunggu')->count();
+            return view('pasien.dashboard.index', [
+                'title' => 'home',
+                'datas' => $datas,
+                'riwayat' => $riwayat,
+                'reservasi' => $reservasi,
+                'jadwal' => $jadwal,
+            ]);
+        }
         
-        return view('dokter.dashboard.index', [
-            'datas' => $datas,
-            'title' => 'home',
-        ]);
     }
 }

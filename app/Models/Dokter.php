@@ -38,4 +38,20 @@ class Dokter extends Authenticatable
     {
         return $this->hasMany(JadwalKontrol::class);
     }
+    public function reservasi()
+    {
+        return $this->hasMany(Reservasi::class);
+    }
+    public function rekamMedis()
+    {
+        return $this->hasMany(RekamMedis::class);
+    }
+    public function izinAbsensi()
+    {
+        return $this->hasMany(IzinAbsensi::class);
+    }
+    public function jadwalPraktik()
+    {
+        return $this->hasMany(JadwalPraktik::class, 'id_dokter', 'id_dokter');
+    }
 }

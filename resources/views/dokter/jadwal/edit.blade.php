@@ -2,58 +2,7 @@
 @section('content')
 @include('partials.sidebar')
 <div id="main" class='layout-navbar'>
-  {{-- navbar --}}
-  <header class='mb-3'>
-      <nav class="navbar navbar-expand navbar-light navbar-top">
-          <div class="container-fluid">
-              <a href="#" class="burger-btn d-block">
-                  <iconify-icon icon="akar-icons:text-align-justified"></iconify-icon>
-              </a>
-
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                  data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                  aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                  <div class="dropdown ms-auto">
-                      <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
-                          <div class="user-menu d-flex">
-                              <div class="user-name text-end me-3">
-                                  <h6 class="mb-0 text-gray-600">{{ Auth::guard('dokter')->user()->nama }}</h6>
-                                  <p class="mb-0 text-sm text-gray-600">Dokter Gigi</p>
-                              </div>
-                              <div class="user-img d-flex align-items-center">
-                                  <div class="avatar avatar-md">
-                                      <img src="{{ asset('asset/img/doc.png') }}">
-                                  </div>
-                              </div>
-                          </div>
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="min-width: 11rem;">
-                          <li>
-                              <h6 class="dropdown-header">Menu</h6>
-                          </li>
-                          <li>
-                              <a class="dropdown-item" href="#">
-                                  Profil Saya
-                              </a>
-                          </li>
-                              <hr class="dropdown-divider">
-                          </li>
-                          <li>
-                              <a class="dropdown-item" href="{{ route('auth.logout') }}">
-                                  Keluar
-                              </a>
-                          </li>
-                      </ul>
-                  </div>
-              </div>
-          </div>
-      </nav>
-  </header>
-  {{-- end of navbar --}}
-
+  @include('partials.navbar')
   {{-- main content --}}
   <div id="main-content">
       <div class="page-heading">
@@ -76,7 +25,7 @@
         <section class="section">
           <div class="card">
             <div class="card-body">
-              <form method="POST" action="{{ url('jadwal/'.$datas->id_jadwal) }}">
+              <form method="POST" action="{{ url('jadwal-kontrol/'.$datas->id_jadwal) }}">
                 @csrf
                 <input type="hidden" name="_method" value="PATCH">
                 <div class="create-group">
@@ -87,10 +36,10 @@
                   </div>
 
                   {{-- id jadwal --}}
-                  <div class="form-group">
+                  {{-- <div class="form-group">
                     <label for="nama-pasien">ID Jadwal</label>
                     <input type="text" class="form-control" name="id_pasien" value="{{ $datas->id_jadwal }}" disabled>
-                  </div>
+                  </div> --}}
   
                   {{-- nama pasien --}}
                   <div class="form-group">
@@ -101,7 +50,7 @@
                   {{-- tgl jadwal --}}
                   <div class="form-group">
                     <label for="tgl_jadwal">Tanggal Jadwal</label>
-                    <input name="tgl_jadwal" type="date" class="form-control @error('tgl_jadwal') is-invalid @enderror" value="{{ $datas->tgl_jadwal }}">
+                    <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror" value="{{ str_replace('-', '/', $datas->tgl_jadwal) }}" autocomplete="off">
                     @error('tgl_jadwal')
                     <span class="invalid-feedback role="alert">
                         <strong>{{ $message }}</strong>
@@ -122,4 +71,30 @@
   </div>
   {{-- end of main content --}}
 </div>
+
+<script type="text/javascript">
+  $(function () {
+    var allowedDays = {{ $tanggal }};
+    var disabledDays = {!! $tgl_izin !!}; // ini gak da d nya
+    console.log(disabledDays);
+
+    $("#datepicker").datepicker({
+      dateFormat: "yy/mm/dd",
+      minDate: 0,
+      beforeShowDay: function (date) {
+        var day = date.getDay();
+        var tanggal = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        
+        if(disabledDays.includes(tanggal)){ // disini ada ran
+            return [false];
+        } else if(allowedDays.includes(day)){
+          return [true, ""];
+        }else {
+          return [false];
+        }
+      },
+    });
+  });
+</script>
+
 @endsection
