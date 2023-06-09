@@ -78,12 +78,16 @@
                         <th>Tanggal Jadwal</th>
                         {{-- <th>Waktu</th> --}}
                       </tr>
-                      @foreach ($datas as $data)
+                      @forelse ($datas as $data)
                       <tr>
                         <td>{{ $data->dokter->nama }}</td>
                         <td>{{ \Carbon\Carbon::parse($data->tgl_jadwal)->translatedFormat('l, d F y') }}</td>
                       </tr>
-                      @endforeach
+                      @empty
+                      <td colspan="2" class="text-center">
+                        Tidak ada data ditemukan.
+                      </td>
+                      @endforelse ($datas as $data)
                     </table>
                 </div>
               </div>
@@ -111,12 +115,18 @@
                       <th>Nama Dokter</th>
                       <th>Tanggal Jadwal</th>
                     </tr>
-                    @foreach ($riwayat as $r)
+                    @forelse ($riwayat as $r)
                     <tr>
                       <td>{{ $r->dokter->nama }}</td>
                       <td>{{ \Carbon\Carbon::parse($r->tgl_jadwal)->translatedFormat('l, d F y') }}</td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                      <td colspan="2" class="text-center">
+                        Tidak ada data ditemukan.
+                      </td>
+                    </tr>
+                    @endforelse
                   </table>
                 </div>
               </div>

@@ -54,7 +54,7 @@
                         </li>
                         <li>
                             <a class="dropdown-item" href="{{ url('profil') }}">
-                                Profil Saya
+                                Edit Profil
                             </a>
                         </li>
                             <hr class="dropdown-divider">

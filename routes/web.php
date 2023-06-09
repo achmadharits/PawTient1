@@ -16,6 +16,7 @@ use App\Http\Controllers\Dokter\DokterReservasiController;
 use App\Http\Controllers\IzinAbsensiController;
 use App\Http\Controllers\ListPasienController;
 use App\Http\Controllers\Pasien\PasienReservasiController;
+use App\Http\Controllers\ProfilController;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,7 +72,6 @@ Route::middleware('auth:dokter')->group(function () {
     Route::resource('jadwal-kontrol', DokterJadwalKontrolController::class);
     Route::post('jadwal-kontrol/cancel/{id}', [DokterJadwalKontrolController::class, 'cancelJadwal']);
     Route::resource('jadwal-praktik', JadwalPraktikController::class);
-    Route::resource('profil', DokterController::class);
     Route::resource('pasien', ListPasienController::class);
     Route::get('rekam-medis/{id}/create', [RekamMedisController::class, 'create']);
     Route::get('rekam-medis/jadwal', [RekamMedisController::class, 'viewJadwal']);
@@ -83,6 +83,9 @@ Route::middleware('auth:dokter')->group(function () {
     });
     Route::resource('izin', IzinAbsensiController::class);
 });
+
+// edit profile
+Route::resource('profil', ProfilController::class)->middleware('auth:pasien,dokter');
 
 
 
