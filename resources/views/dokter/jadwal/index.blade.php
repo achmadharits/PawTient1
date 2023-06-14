@@ -54,7 +54,7 @@
                             <td>
                               <div class="table-action">
                                 {{-- edit --}}
-                                <a href="{{ url('jadwal-kontrol/'.$data->id_jadwal.'/edit') }}" class="btn btn-txt btn-grey me-1 {{ $data->status == 'Selesai' || $data->status == 'Batal' || $data->status == 'Aktif' && $data->tgl_jadwal == now()->toDateString() ? 'd-none' : '' }}" alt="edit">
+                                <a href="{{ url('jadwal-kontrol/'.$data->id_jadwal.'/edit') }}" class="btn btn-txt btn-grey me-1 {{ $data->status == 'Selesai' || $data->status == 'Batal' || $data->status == 'Undelivered' || $data->status == 'Aktif' && $data->tgl_jadwal == now()->toDateString() ? 'd-none' : '' }}" alt="edit">
                                   <div class="d-flex align-items-center justify-content-center">
                                     <iconify-icon icon="akar-icons:pencil" class="me-1" data-align="center"></iconify-icon>
                                     <div class="icon-txt">Edit</div>
