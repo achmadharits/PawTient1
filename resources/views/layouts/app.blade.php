@@ -18,6 +18,12 @@
     <script src="https://code.jquery.com/jquery-3.6.4.slim.js" integrity="sha256-dWvV84T6BhzO4vG6gWhsWVKVoa4lVmLnpBOZh/CAHU4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
 
+    {{-- datepicker --}}
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://momentjs.com/downloads/moment.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
     <!-- Bootstrap -->
     @vite(['resources/js/app.js'])
 
@@ -29,17 +35,14 @@
     <script src="{{ asset('asset/template/app.js') }}" defer></script>
 
     {{-- datatables --}}
+    {{-- <script src="https://cdn.datatables.net/v/bs5/dt-1.12.1/datatables.min.js"></script>
+    <link rel="stylesheet" href="{{ asset('asset/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('asset/datatables/datatables.css') }}">
+    <script src="{{ asset('asset/datatables/datatables.js') }}" defer></script> --}}
     <link rel="stylesheet" href="{{ asset('asset/simple-datatables/simple-datatables.css') }}">
     <link rel="stylesheet" href="{{ asset('asset/simple-datatables/style.css') }}">
     <script src="{{ asset('asset/simple-datatables/umd/simple-datatables.js') }}" defer></script>
     <script src="{{ asset('asset/simple-datatables/simple-datatables.js') }}" defer></script>
-
-    {{-- datepicker --}}
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://momentjs.com/downloads/moment.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
 </head>
 <body>
     <div id="app">

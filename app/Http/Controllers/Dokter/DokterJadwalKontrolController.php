@@ -48,7 +48,10 @@ class DokterJadwalKontrolController extends Controller
         ->update(['status' => 'Selesai']);
 
         $id = Auth::guard('dokter')->user()->id_dokter;
-        $datas = JadwalKontrol::where('id_dokter', $id)
+
+        $tanggal = request()->query('date'); 
+        $datas = JadwalKontrol::when($tanggal, function ($query) use ($tanggal) { $query->where('tgl_jadwal', $tanggal);})
+        ->where('id_dokter', $id)
         ->orderBy('status')
         ->orderByRaw("CASE WHEN status = 'Aktif' THEN 0 ELSE 1 END")
         ->orderByRaw("ABS(DATEDIFF(NOW(), tgl_jadwal))")

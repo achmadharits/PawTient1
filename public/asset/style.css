@@ -156,6 +156,9 @@ a.btn.btn-primary:hover{
   border-radius: 12px !important;
   /* height: 42px !important; */
 }
+.form-control.group{
+  border-radius: 12px 0px 0px 12px !important;
+}
 
 /* navbar template */
 .navbar-light{
