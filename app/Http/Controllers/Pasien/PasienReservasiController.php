@@ -103,6 +103,7 @@ class PasienReservasiController extends Controller
             'id_dokter' => $request['id_dokter'],
             'id_pasien' => $request['id_pasien'],
             'tgl_reservasi' => $newTgl,
+            'jam_reservasi' => $request['jam_reservasi'],
             'deskripsi' => $request['deskripsi'],
             'status' => 'Menunggu',
         ]);

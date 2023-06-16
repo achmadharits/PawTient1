@@ -51,9 +51,10 @@
                 <table class="table table-responsive table-striped" id="table1">
                   <thead>
                       <tr>
-                          <th data-sortable>ID Jadwal</th>
+                          {{-- <th data-sortable>ID Jadwal</th> --}}
                           <th data-sortable>Nama Pasien</th>
                           <th data-sortable>Tanggal Jadwal</th>
+                          <th data-sortable>Jam Jadwal</th>
                           <th data-sortable>Status</th>
                           <th>Aksi</th>
                       </tr>
@@ -61,9 +62,10 @@
                   <tbody>
                     @foreach ($datas as $data)
                       <tr>
-                          <td>{{ $data->id_jadwal }}</td>
+                          {{-- <td>{{ $data->id_jadwal }}</td> --}}
                           <td>{{ $data->pasien->nama }}</td>
                           <td>{{ \Carbon\Carbon::parse($data->tgl_jadwal)->translatedFormat('l, d F Y') }}</td>
+                          <td>{{ \Carbon\Carbon::parse($data->jam_jadwal)->format('H:i') }}</td>
                           <td>
                             <span class="badge {{ $data->status == 'Aktif' ? 'bg-light-success' : 'bg-light-secondary' }}">{{ $data->status }}</span>
                           </td>

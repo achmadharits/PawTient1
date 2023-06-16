@@ -35,6 +35,12 @@ class DokterJadwalKontrolController extends Controller
         Carbon::setLocale('id');
         return Carbon::parse($date)->translatedFormat('l');
     }
+
+    public function setTime($time)
+    {
+        Carbon::setLocale('id');
+        return Carbon::parse($time)->translatedFormat('H:i');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -55,6 +61,7 @@ class DokterJadwalKontrolController extends Controller
         ->orderBy('status')
         ->orderByRaw("CASE WHEN status = 'Aktif' THEN 0 ELSE 1 END")
         ->orderByRaw("ABS(DATEDIFF(NOW(), tgl_jadwal))")
+        ->orderBy('jam_jadwal', 'asc')
         ->get();
 
         return view('dokter.jadwal.index', [
@@ -99,6 +106,7 @@ class DokterJadwalKontrolController extends Controller
             'datas' => $datas,
             'tanggal' => $tanggal->pluck('hari'),
             'tgl_izin' => $tgl_izin,
+            'id_dokter' => $id, 
         ]);
         
     }
@@ -122,14 +130,16 @@ class DokterJadwalKontrolController extends Controller
             $id_jadwalCustom++;
         }
         
-        // change date format
+        // change datetime format
         $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d');
+        // $newJam = Carbon::createFromFormat('H:i', $request['jam_jadwal'])->format('H:i');
 
         $jadwal = JadwalKontrol::create([
             'id_jadwal' => $id_jadwalCustom,
             'id_dokter' => $request['id_dokter'],
             'id_pasien' => $request['id_pasien'],
             'tgl_jadwal' => $newTgl,
+            'jam_jadwal' => $request['jam_jadwal'],
             'status' => 'Undelivered',
         ]);
         
@@ -139,13 +149,13 @@ class DokterJadwalKontrolController extends Controller
         $jam = JadwalPraktik::where('id_dokter', $id)->where('hari', $hari)->first();
 
         $pesan = 'Halo '.$jadwal->pasien->nama.'. Kamu mendapatkan jadwal untuk melakukan kontrol dengan drg. '
-        .$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).'.'.PHP_EOL.'Silakan datang ke klinik pada jam praktik '
-        .$jam->jam_kerja.' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.
+        .$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).'.'.PHP_EOL.'Silakan datang ke klinik pada pukul '
+        .$this->setTime($jadwal->jam_jadwal).' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.
         PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
 
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
-            'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
+            'Authorization' => '3obysh37CBiBiY7F@ood', 
         ])->post('https://api.fonnte.com/send', [
             'target' => $jadwal->pasien->no_hp,
             'message' => $pesan,
@@ -241,12 +251,14 @@ class DokterJadwalKontrolController extends Controller
         ]);
         $datas = JadwalKontrol::find($id);
         $oldTgl = $datas->tgl_jadwal;
+        $oldJam = $datas->jam_jadwal;
 
         // change date format
         $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d');
 
         // update data
         $datas->tgl_jadwal = $newTgl;
+        $datas->jam_jadwal = $request['jam_jadwal'];
         $datas->save();
 
         // create reminder message
@@ -255,13 +267,13 @@ class DokterJadwalKontrolController extends Controller
         $jam = JadwalPraktik::where('id_dokter', $id)->where('hari', $hari)->first();
 
         $pesan = '*[PEMBERITAHUAN]*'.PHP_EOL.PHP_EOL.'Halo '.$datas->pasien->nama.'. Untuk jadwal kontrol dengan drg. '
-        .$datas->dokter->nama.' yang semula pada '.$this->setDate($oldTgl).', kami ubah menjadi '.'*'.$this->setDate($datas->tgl_jadwal).'*.'.PHP_EOL.PHP_EOL.
-        'Silakan datang ke klinik pada jam praktik '.$jam->jam_kerja.' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.
+        .$datas->dokter->nama.' yang semula pada '.$this->setDate($oldTgl).' pukul '.$this->setTime($oldJam).' WIB, kami ubah menjadi '.'*'.$this->setDate($datas->tgl_jadwal).'* pukul '.'*'.$this->setTime($datas->jam_jadwal).'*'.
+        ' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.
         '*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
 
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
-            'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
+            'Authorization' => '3obysh37CBiBiY7F@ood', 
         ])->post('https://api.fonnte.com/send', [
             'target' => $datas->pasien->no_hp,
             'message' => $pesan,
@@ -285,14 +297,14 @@ class DokterJadwalKontrolController extends Controller
         $datas->update(['status' => 'Batal']);
 
         $pesan = '*[PEMBERITAHUAN]*'.PHP_EOL.PHP_EOL.'Halo '.$datas->pasien->nama.'. Kami memohon maaf untuk jadwal kontrol dengan drg. '
-        .$datas->dokter->nama.' pada '.$this->setDate($datas->tgl_jadwal).' kami batalkan.'.PHP_EOL.PHP_EOL.
+        .$datas->dokter->nama.' pada '.$this->setDate($datas->tgl_jadwal).' pukul '.$this->setTime($datas->jam_jadwal).' WIB kami batalkan.'.PHP_EOL.PHP_EOL.
         'Silakan menunggu jadwal terbaru atau dapat mengajukan reservasi jadwal kepada dokter gigi yang bersangkutan. Terima kasih.'
         .PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.
         'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
 
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
-            'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
+            'Authorization' => '3obysh37CBiBiY7F@ood', 
         ])->post('https://api.fonnte.com/send', [
             'target' => $datas->pasien->no_hp,
             'message' => $pesan,

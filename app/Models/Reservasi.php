@@ -17,6 +17,7 @@ class Reservasi extends Model
         'id_dokter',
         'id_pasien',
         'tgl_reservasi',
+        'jam_reservasi',
         'status',
         'deskripsi'
     ];

@@ -53,13 +53,26 @@
                   {{-- tgl jadwal --}}
                   <div class="form-group">
                     <label for="tgl_jadwal">Tanggal Jadwal</label>
-                    <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror" autocomplete="off" placeholder="YYYY/MM/DD">
+                    <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror" 
+                    autocomplete="off" placeholder="YYYY/MM/DD" onchange="getJamKerja();">
                     @error('tgl_jadwal')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
                     </span>
                     @enderror
                   </div>
+
+                  {{-- jam --}}
+                  <div class="form-group">
+                    <label for="jam_jadwal">Jam Jadwal</label>
+                    <input type="text" name="jam_jadwal" id="timepicker" class="form-control  @error('jam_jadwal') is-invalid @enderror" autocomplete="off">
+                    @error('jam_jadwal')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                  </div>
+
                 </div>
   
                 <button type="submit" class="btn btn-primary mt-3">Simpan</button>
@@ -98,5 +111,52 @@
       },
     });
   });
+</script>
+
+<script type="text/javascript">
+  function updateMinAndMax(min, max) {
+    $('#timepicker').timepicker('option', 'minTime', min);
+    $('#timepicker').timepicker('option', 'maxTime', max);
+    $('#timepicker').timepicker('option', ' defaultTime', min);
+  }
+
+
+  function getJamKerja() {
+    let jam_kerja = [];
+    let id_dokter = "{{ $id_dokter }}";
+    let tanggal = document.getElementById("datepicker").value;
+    let newTgl = moment(tanggal).format('YYYY-MM-DD');
+    let startHour;
+    let endHour;
+
+    axios.get('/api/jadwal/'+id_dokter+'/'+newTgl, {
+    })
+    .then(function (response) {
+      let workHours = response.data.jadwal;
+      startHour = workHours.toString().substring(0, 5);
+      endHour = workHours.toString().substring(8, 13);
+      updateMinAndMax(startHour,endHour)
+      console.log(startHour, endHour);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+    $('#timepicker').timepicker({
+        timeFormat: 'H:i',
+        interval: 30,
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true,
+        disableTimeRanges: [
+          ['12:00', '12:31'],
+          ['15:00', '15:31'],
+        ],
+        listWidth: .5,
+    });
+    
+
+  }
+  
 </script>
 @endsection

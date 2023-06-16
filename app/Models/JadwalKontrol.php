@@ -17,6 +17,7 @@ class JadwalKontrol extends Model
         'id_dokter',
         'id_pasien',
         'tgl_jadwal',
+        'jam_jadwal',
         'status',
         'pesan'
     ];

@@ -30,6 +30,7 @@
                         <tr>
                             <th data-sortable>Nama Pasien</th>
                             <th data-sortable>Tanggal Reservasi</th>
+                            <th data-sortable>Jam Reservasi</th>
                             <th data-sortable>Deskripsi</th>
                             <th>Aksi</th>
                         </tr>
@@ -38,7 +39,8 @@
                       @foreach ($datas as $data)
                         <tr>
                             <td>{{ $data->pasien->nama }}</td>
-                            <td>{{ $data->tgl_reservasi }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data->tgl_reservasi)->translatedFormat('l, d F Y') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($data->jam_reservasi)->format('H:i') }}</td>
                             <td>{{ $data->deskripsi }}</td>
                             <td>
                               <div class="table-action">

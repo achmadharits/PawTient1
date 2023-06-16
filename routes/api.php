@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiJadwalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +19,14 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get('jadwal/{id}/{tanggal}', [ApiJadwalController::class, 'getHari']);
+Route::resource('jadwal', ApiJadwalController::class);
+
+
+// class ApiJadwalController extends Controller
+// {
+//     function getJadwalPraktik() {
+//         $jadwal = JadwalPraktik::all();
+//         return $jadwal;
+//     }
+// }
