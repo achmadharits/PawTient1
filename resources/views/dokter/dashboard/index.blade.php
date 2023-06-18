@@ -87,7 +87,7 @@
             </div>
 
             <div class="col-lg-6 col-12">
-              <div class="card">
+              <div class="card" style=" height:435px">
                 <div class="card-header">
                   <div class="row">
                     <div class="col-lg-7 col-md-7 col-sm-7 col-7">

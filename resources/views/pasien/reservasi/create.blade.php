@@ -17,6 +17,12 @@
         <section class="section">
           <div class="card">
             <div class="card-body">
+              @if(session()->has('error'))
+              <div class="alert alert-light-danger alert-dismissible show fade mb-2">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ session()->get('error') }}
+              </div>
+              @endif
               <div class="form-group">
                 <label for="id_dokter">Nama Dokter</label>
                 <input type="text" class="form-control" value="{{ $datas->nama }}" disabled>

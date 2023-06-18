@@ -36,7 +36,7 @@ class DokterReservasiController extends Controller
     public function setTime($time)
     {
         Carbon::setLocale('id');
-        return Carbon::parse($time)->translatedFormat('h:i');
+        return Carbon::parse($time)->translatedFormat('H:i');
     }
     /**
      * Display a listing of the resource.
@@ -67,7 +67,35 @@ class DokterReservasiController extends Controller
         $datas = Reservasi::find($id);
 
         // create antrian
-        
+        $jam =  $datas['jam_reservasi'];
+        // Cek jadwal kontrol yang sudah ada pada tanggal yang sama
+        $existingJadwal = JadwalKontrol::where('tgl_jadwal', $datas->tgl_reservasi)
+            ->orderBy('jam_jadwal', 'asc')
+            ->get();
+
+        // Periksa jika jam baru sudah ada pada tanggal yang sama
+        if ($existingJadwal->contains('jam_jadwal', Carbon::parse($jam)->format('H:i:s'))) {
+            return redirect('jadwal-kontrol')->withError('Jadwal kontrol sudah dimiliki oleh pasien lain.');
+        }
+    
+        $antrian = 1;
+        if ($existingJadwal->count() > 0) {
+            // Cari posisi jadwal baru dalam urutan jam
+            $position = $existingJadwal->search(function ($item, $key) use ($jam) {
+                return $item->jam_jadwal >= $jam;
+            });
+    
+            $antrian = $position === false ? $existingJadwal->count() + 1 : $position + 1;
+
+            // Update antrian untuk jadwal kontrol yang berada di posisi setelahnya
+            if ($position !== false) {
+                $existingJadwal->slice($position)->each(function ($jadwal) {
+                    $jadwal->increment('antrian');
+                });
+            }
+        } else {
+            $antrian = 1;
+        }
         
 
         $jadwal = JadwalKontrol::create([
@@ -77,6 +105,7 @@ class DokterReservasiController extends Controller
             'tgl_jadwal' => $datas->tgl_reservasi,
             'jam_jadwal' => $datas->jam_reservasi,
             'status' => 'Undelivered',
+            'antrian' => $antrian,
         ]);
         $datas->update(['status' => 'Disetujui']);
 
@@ -86,8 +115,9 @@ class DokterReservasiController extends Controller
 
         // create reminder message
         $pesan = 'Halo '.$jadwal->pasien->nama.'. Pengajuan reservasi untuk melakukan kontrol dengan drg. '
-        .$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).' telah disetujui. Silakan datang pada pukul '
-        .$this->setTime($jadwal->jam_jadwal).' WIB sesuai yang diajukan. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.
+        .$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).' pukul'.$this->setTime($jadwal->jam_jadwal).' WIB telah disetujui.'
+        .PHP_EOL.PHP_EOL.'Nomor antrianmu adalah '.$jadwal->antrian.' dan pastikan selalu cek nomor antrianmu di website secara berkala karena sewaktu-waktu nomor antrian dapat berubah. Terima kasih.'
+        .PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.
         PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
         
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');

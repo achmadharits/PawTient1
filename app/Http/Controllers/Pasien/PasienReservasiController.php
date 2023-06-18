@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Pasien;
 use Carbon\Carbon;
 use App\Models\Dokter;
 use App\Models\Reservasi;
+use App\Models\IzinAbsensi;
 use Illuminate\Http\Request;
+use App\Models\JadwalKontrol;
 use App\Models\JadwalPraktik;
 use App\Http\Controllers\Controller;
-use App\Models\IzinAbsensi;
 use Illuminate\Support\Facades\Auth;
 
 class PasienReservasiController extends Controller
@@ -98,6 +99,18 @@ class PasienReservasiController extends Controller
         ]);
         // change date format
         $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_reservasi'])->format('Y-m-d');
+
+        $jam =  $request['jam_reservasi'];
+
+        // Cek jadwal kontrol yang sudah ada pada tanggal yang sama
+        $existingJadwal = JadwalKontrol::where('tgl_jadwal', $newTgl)
+            ->orderBy('jam_jadwal', 'asc')
+            ->get();
+
+        // Periksa jika jam baru sudah ada pada tanggal yang sama
+        if ($existingJadwal->contains('jam_jadwal', Carbon::parse($jam)->format('H:i:s'))) {
+            return redirect('pasien/reservasi/'.$request->id_dokter.'/create')->withError('Jadwal yang diajukan sudah dimiliki pasien lain.');
+        }
 
         Reservasi::create([
             'id_dokter' => $request['id_dokter'],

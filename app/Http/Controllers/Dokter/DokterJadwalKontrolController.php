@@ -121,6 +121,7 @@ class DokterJadwalKontrolController extends Controller
         $request->validate([
             'id_pasien' => 'required|not_in:null',
             'tgl_jadwal' => 'required|date|after:today',
+            'jam_jadwal' => 'required'
         ]);
 
         $id_jadwalCustom = JadwalKontrol::pluck('id_jadwal')->count();
@@ -180,9 +181,10 @@ class DokterJadwalKontrolController extends Controller
         $hari = $this->setDay($jadwal->tgl_jadwal);
         $jam = JadwalPraktik::where('id_dokter', $id)->where('hari', $hari)->first();
 
-        $pesan = 'Halo '.$jadwal->pasien->nama.'. Kamu mendapatkan jadwal untuk melakukan kontrol dengan drg. '
-        .$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).'.'.PHP_EOL.'Silakan datang ke klinik pada pukul '
-        .$this->setTime($jadwal->jam_jadwal).' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.
+        $pesan = 'Halo '.$jadwal->pasien->nama.'. Kamu memiliki jadwal untuk melakukan kontrol dengan drg. '
+        .$jadwal->dokter->nama.' pada '.$this->setDate($jadwal->tgl_jadwal).' pukul '.$this->setTime($jadwal->jam_jadwal).
+        ' WIB dengan antrian nomor '.$jadwal->antrian.'.'.PHP_EOL.'Lakukan pengecekan antrian secara berkala pada website karena sewaktu-waktu nomor antrian bisa berubah. Terima kasih.'.
+        PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.'*Klinik Gigi Bara Senyum*'.
         PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
 
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
@@ -280,11 +282,12 @@ class DokterJadwalKontrolController extends Controller
     {
         $request->validate([
             'tgl_jadwal' => 'required|date|after:today',
+            'jam_jadwal' => 'required',
         ]);
         $datas = JadwalKontrol::find($id);
         $oldTgl = $datas->tgl_jadwal; // 20 Juni 2023
         $oldJam = $this->setTime($datas->jam_jadwal); // 13:00 antrian 1
-
+        $antrian = 0;
         // change date format
         $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d'); // 20 juni 2023
         $jamBaru = $request['jam_jadwal']; // 17:00
@@ -313,14 +316,21 @@ class DokterJadwalKontrolController extends Controller
         ->orderBy('jam_jadwal', 'asc')
         ->get();
 
+        // ini untuk melakukan update jika tanggalnya sama
+
 
         // Sort ulang jadwal kontrol berdasarkan jam kontrol
-        $existingJadwal->sortBy('jam_jadwal')->values()->each(function ($jadwal, $index) {
-            // dd($jadwal, $index);
+        $existingJadwal->sortBy('jam_jadwal')->values()->each(function ($jadwal, $index) use ($jamBaru, $antrian) {
+            if($jadwal->jam_jadwal == Carbon::parse($jamBaru)->format('H:i:s')){
+                $antrian = $index + 1;
+            }
             $jadwal->antrian = $index + 1;
             $jadwal->save();
         });
 
+
+        //  ini untuk melakukan update jika tanggalnya berbeda
+        // misal sebelum di update tgl 20 juni 2023 terus pas ran edit jadi tanggal 19 juni 2023
         if($newTgl != $oldTgl){
             $existingJadwal = JadwalKontrol::where('tgl_jadwal', $newTgl)
             ->orderBy('jam_jadwal', 'asc')
@@ -328,24 +338,36 @@ class DokterJadwalKontrolController extends Controller
     
     
             // Sort ulang jadwal kontrol berdasarkan jam kontrol
-            $existingJadwal->sortBy('jam_jadwal')->values()->each(function ($jadwal, $index) {
-                // dd($jadwal, $index);
+            $existingJadwal->sortBy('jam_jadwal')->values()->each(function ($jadwal, $index) use($jamBaru, $antrian){
+                if($jadwal->jam_jadwal == Carbon::parse($jamBaru)->format('H:i:s')){
+                    $antrian = $index + 1;
+                }
                 $jadwal->antrian = $index + 1;
                 $jadwal->save();
             });
+            
         }
 
         // create reminder message
         $id = Auth::guard('dokter')->user()->id_dokter;
         $hari = $this->setDay($datas->tgl_jadwal);
         $jam = JadwalPraktik::where('id_dokter', $id)->where('hari', $hari)->first();
+        $antrian = JadwalKontrol::where('tgl_jadwal', $newTgl)->where('jam_jadwal',$jamBaru)->first()->antrian;
+        // dd($antrian);
 
-        // return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil diubah.');
-
-        $pesan = '*[PEMBERITAHUAN]*'.PHP_EOL.PHP_EOL.'Halo '.$datas->pasien->nama.'. Untuk jadwal kontrol dengan drg. '
-        .$datas->dokter->nama.' yang semula pada '.$this->setDate($oldTgl).' pukul '.$this->setTime($oldJam).' WIB, kami ubah menjadi '.'*'.$this->setDate($datas->tgl_jadwal).'* pukul '.'*'.$this->setTime($datas->jam_jadwal).'*'.
-        ' WIB. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.
-        '*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
+        if($oldTgl == $newTgl){
+            $pesan = '*[PEMBERITAHUAN]*'.PHP_EOL.PHP_EOL.'Halo '.$datas->pasien->nama.'. Untuk jadwal kontrol dengan drg. '
+            .$datas->dokter->nama.' pada '.$this->setDate($oldTgl).' yang semula pukul *'.$this->setTime($oldJam).' WIB*, kami ubah menjadi pukul '.'*'.$this->setTime($datas->jam_jadwal).' WIB* dengan antrian nomor '.
+            $antrian.'.'.PHP_EOL.PHP_EOL.'Lakukan pengecekan antrian secara berkala pada website karena sewaktu-waktu nomor antrian bisa berubah. Terima kasih.'
+            .PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.
+            '*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
+        }else{
+            $pesan = '*[PEMBERITAHUAN]*'.PHP_EOL.PHP_EOL.'Halo '.$datas->pasien->nama.'. Untuk jadwal kontrol dengan drg. '
+            .$datas->dokter->nama.' yang semula pada '.$this->setDate($oldTgl).' pukul '.$this->setTime($oldJam).' WIB, kami ubah menjadi '.'*'.$this->setDate($datas->tgl_jadwal).'* pukul *'.$this->setTime($datas->jam_jadwal).
+            ' WIB* dengan antrian nomor '.$antrian.'.'.PHP_EOL.PHP_EOL.'Lakukan pengecekan antrian secara berkala pada website karena sewaktu-waktu nomor antrian bisa berubah. Terima kasih.'
+            .PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.
+            '*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
+        }
 
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
