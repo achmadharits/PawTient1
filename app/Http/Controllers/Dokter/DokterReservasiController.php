@@ -146,7 +146,7 @@ class DokterReservasiController extends Controller
 
         // create announcement message
         $pesan = 'Halo '.$datas->pasien->nama.'. Kami memohon maaf untuk pengajuan reservasi untuk melakukan kontrol dengan drg. '
-        .$datas->dokter->nama.' pada '.$this->setDate($datas->tgl_reservasi).' pukul '.$this->setTime($datas->jam_jadwal).' WIB kami tolak.'.PHP_EOL.
+        .$datas->dokter->nama.' pada '.$this->setDate($datas->tgl_reservasi).' pukul '.$this->setTime($datas->jam_reservasi).' WIB kami tolak.'.PHP_EOL.
         'Silakan mengajukan reservasi kembali di tanggal yang berbeda. Terima kasih.'.PHP_EOL.PHP_EOL.'____________________'.PHP_EOL.
         '*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
 

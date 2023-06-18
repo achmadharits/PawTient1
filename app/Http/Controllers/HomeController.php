@@ -39,6 +39,7 @@ class HomeController extends Controller
             $id = Auth::guard('dokter')->user()->id_dokter;
             $datas = JadwalKontrol::where('id_dokter', $id)
             ->where('tgl_jadwal', now()->toDateString())
+            ->where('status', 'Aktif')
             ->orderBy('antrian')
             ->get();
             $jadwal = JadwalKontrol::where('id_dokter', $id)->where('status', 'Aktif')->count();

@@ -87,7 +87,7 @@
                         <td>{{ Carbon\Carbon::parse($data->jam_jadwal)->format('H:i') }} WIB</td>
                       </tr>
                       @empty
-                      <td colspan="2" class="text-center">
+                      <td colspan="4" class="text-center">
                         Tidak ada data ditemukan.
                       </td>
                       @endforelse
