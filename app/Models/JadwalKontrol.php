@@ -19,7 +19,8 @@ class JadwalKontrol extends Model
         'tgl_jadwal',
         'jam_jadwal',
         'status',
-        'pesan'
+        'pesan',
+        'antrian',
     ];
 
     public function dokter()

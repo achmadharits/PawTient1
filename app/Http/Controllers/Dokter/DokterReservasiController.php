@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dokter;
 
+use DateTime;
 use Carbon\Carbon;
 use App\Models\Reservasi;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Models\JadwalKontrol;
 use App\Models\JadwalPraktik;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
 class DokterReservasiController extends Controller
@@ -63,6 +65,11 @@ class DokterReservasiController extends Controller
         }
 
         $datas = Reservasi::find($id);
+
+        // create antrian
+        
+        
+
         $jadwal = JadwalKontrol::create([
             'id_jadwal' => $id_jadwalCustom,
             'id_dokter' => $datas->id_dokter,

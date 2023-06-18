@@ -134,6 +134,37 @@ class DokterJadwalKontrolController extends Controller
         $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d');
         // $newJam = Carbon::createFromFormat('H:i', $request['jam_jadwal'])->format('H:i');
 
+        $jam =  $request['jam_jadwal'];
+    
+        // Cek jadwal kontrol yang sudah ada pada tanggal yang sama
+        $existingJadwal = JadwalKontrol::where('tgl_jadwal', $newTgl)
+            ->orderBy('jam_jadwal', 'asc')
+            ->get();
+
+        // Periksa jika jam baru sudah ada pada tanggal yang sama
+        if ($existingJadwal->contains('jam_jadwal', Carbon::parse($jam)->format('H:i:s'))) {
+            return redirect('jadwal-kontrol')->withError('Jadwal kontrol sudah dimiliki oleh pasien lain.');
+        }
+    
+        $antrian = 1;
+        if ($existingJadwal->count() > 0) {
+            // Cari posisi jadwal baru dalam urutan jam
+            $position = $existingJadwal->search(function ($item, $key) use ($jam) {
+                return $item->jam_jadwal >= $jam;
+            });
+    
+            $antrian = $position === false ? $existingJadwal->count() + 1 : $position + 1;
+
+            // Update antrian untuk jadwal kontrol yang berada di posisi setelahnya
+            if ($position !== false) {
+                $existingJadwal->slice($position)->each(function ($jadwal) {
+                    $jadwal->increment('antrian');
+                });
+            }
+        } else {
+            $antrian = 1;
+        }
+
         $jadwal = JadwalKontrol::create([
             'id_jadwal' => $id_jadwalCustom,
             'id_dokter' => $request['id_dokter'],
@@ -141,6 +172,7 @@ class DokterJadwalKontrolController extends Controller
             'tgl_jadwal' => $newTgl,
             'jam_jadwal' => $request['jam_jadwal'],
             'status' => 'Undelivered',
+            'antrian' => $antrian,
         ]);
         
         // create reminder message
@@ -250,21 +282,65 @@ class DokterJadwalKontrolController extends Controller
             'tgl_jadwal' => 'required|date|after:today',
         ]);
         $datas = JadwalKontrol::find($id);
-        $oldTgl = $datas->tgl_jadwal;
-        $oldJam = $datas->jam_jadwal;
+        $oldTgl = $datas->tgl_jadwal; // 20 Juni 2023
+        $oldJam = $this->setTime($datas->jam_jadwal); // 13:00 antrian 1
 
         // change date format
-        $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d');
+        $newTgl = Carbon::createFromFormat('Y/m/d', $request['tgl_jadwal'])->format('Y-m-d'); // 20 juni 2023
+        $jamBaru = $request['jam_jadwal']; // 17:00
+
+        // Cek jadwal kontrol yang sudah ada pada tanggal yang sama
+        $existingJadwal = JadwalKontrol::where('tgl_jadwal', $newTgl)
+            ->orderBy('jam_jadwal', 'asc')
+            ->get();
+
+        // Periksa jika jam baru sama dengan jam lama
+        if ($jamBaru === $oldJam && $newTgl === $oldTgl) { // ini ran masalahnya, kasih && cek tanggal juga
+            return redirect('jadwal-kontrol')->withSuccess('Jam kontrol tidak berubah.');
+        }
+
+        // Periksa jika jam baru sudah ada pada tanggal yang sama
+        if ($existingJadwal->contains('jam_jadwal', Carbon::parse($jamBaru)->format('H:i:s'))) {
+            return redirect('jadwal-kontrol')->withError('Jadwal kontrol sudah dimiliki oleh pasien lain.');
+        }
 
         // update data
         $datas->tgl_jadwal = $newTgl;
         $datas->jam_jadwal = $request['jam_jadwal'];
         $datas->save();
 
+        $existingJadwal = JadwalKontrol::where('tgl_jadwal', $oldTgl)
+        ->orderBy('jam_jadwal', 'asc')
+        ->get();
+
+
+        // Sort ulang jadwal kontrol berdasarkan jam kontrol
+        $existingJadwal->sortBy('jam_jadwal')->values()->each(function ($jadwal, $index) {
+            // dd($jadwal, $index);
+            $jadwal->antrian = $index + 1;
+            $jadwal->save();
+        });
+
+        if($newTgl != $oldTgl){
+            $existingJadwal = JadwalKontrol::where('tgl_jadwal', $newTgl)
+            ->orderBy('jam_jadwal', 'asc')
+            ->get();
+    
+    
+            // Sort ulang jadwal kontrol berdasarkan jam kontrol
+            $existingJadwal->sortBy('jam_jadwal')->values()->each(function ($jadwal, $index) {
+                // dd($jadwal, $index);
+                $jadwal->antrian = $index + 1;
+                $jadwal->save();
+            });
+        }
+
         // create reminder message
         $id = Auth::guard('dokter')->user()->id_dokter;
         $hari = $this->setDay($datas->tgl_jadwal);
         $jam = JadwalPraktik::where('id_dokter', $id)->where('hari', $hari)->first();
+
+        // return redirect('jadwal-kontrol')->withSuccess('Data jadwal berhasil diubah.');
 
         $pesan = '*[PEMBERITAHUAN]*'.PHP_EOL.PHP_EOL.'Halo '.$datas->pasien->nama.'. Untuk jadwal kontrol dengan drg. '
         .$datas->dokter->nama.' yang semula pada '.$this->setDate($oldTgl).' pukul '.$this->setTime($oldJam).' WIB, kami ubah menjadi '.'*'.$this->setDate($datas->tgl_jadwal).'* pukul '.'*'.$this->setTime($datas->jam_jadwal).'*'.
@@ -279,6 +355,7 @@ class DokterJadwalKontrolController extends Controller
             'message' => $pesan,
             'countryCode' => '62',
         ]);
+        
         
         if ($response->ok()) {
             // $responseData = $response->json();

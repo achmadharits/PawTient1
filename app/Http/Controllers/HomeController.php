@@ -37,8 +37,10 @@ class HomeController extends Controller
     {
         if(Auth::guard('dokter')->check()){
             $id = Auth::guard('dokter')->user()->id_dokter;
-            $datas = Dokter::all();
-            $pasien = Pasien::limit(5)->get();
+            $datas = JadwalKontrol::where('id_dokter', $id)
+            ->where('tgl_jadwal', now()->toDateString())
+            ->orderBy('antrian')
+            ->get();
             $jadwal = JadwalKontrol::where('id_dokter', $id)->where('status', 'Aktif')->count();
             $reservasi = Reservasi::where('id_dokter', $id)->where('status', 'Menunggu')->count();
             $praktik = JadwalPraktik::where('id_dokter', $id)->get();
@@ -48,7 +50,6 @@ class HomeController extends Controller
                 'title' => 'home',
                 'jadwal' => $jadwal,
                 'reservasi' => $reservasi,
-                'pasien' => $pasien,
             ]);
         }elseif(Auth::guard('pasien')->check()){
             $id = Auth::guard('pasien')->user()->id_pasien;

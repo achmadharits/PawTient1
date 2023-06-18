@@ -43,15 +43,18 @@
                 {{ session()->get('success') }}
               </div>
               @endif
-              {{-- <div class="input-group input-group-md me-2">
-                <input type="date" class="form-control group" id="filterTanggal" placeholder="Filter Tanggal">
-                <button class="btn btn-primary" id="btnFilter">Filter</button>
-              </div> --}}
+              @if(session()->has('error'))
+              <div class="alert alert-light-danger alert-dismissible show fade mb-2">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                {{ session()->get('error') }}
+              </div>
+              @endif
+              
               <div id="table1_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
                 <table class="table table-responsive table-striped" id="table1">
                   <thead>
                       <tr>
-                          {{-- <th data-sortable>ID Jadwal</th> --}}
+                          <th data-sortable>No. Antrian</th>
                           <th data-sortable>Nama Pasien</th>
                           <th data-sortable>Tanggal Jadwal</th>
                           <th data-sortable>Jam Jadwal</th>
@@ -62,7 +65,7 @@
                   <tbody>
                     @foreach ($datas as $data)
                       <tr>
-                          {{-- <td>{{ $data->id_jadwal }}</td> --}}
+                          <td>{{ $data->antrian }}</td>
                           <td>{{ $data->pasien->nama }}</td>
                           <td>{{ \Carbon\Carbon::parse($data->tgl_jadwal)->translatedFormat('l, d F Y') }}</td>
                           <td>{{ \Carbon\Carbon::parse($data->jam_jadwal)->format('H:i') }}</td>

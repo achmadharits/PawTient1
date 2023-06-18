@@ -74,20 +74,23 @@
                 <div class="card-body list-jadwal">
                     <table class="table thead-dark">
                       <tr>
+                        <th>No. Antrian</th>
                         <th>Nama Dokter</th>
-                        <th>Tanggal Jadwal</th>
-                        {{-- <th>Waktu</th> --}}
+                        <th>Tanggal</th>
+                        <th>Jam</th>
                       </tr>
                       @forelse ($datas as $data)
                       <tr>
+                        <td>{{ $data->antrian }}</td>
                         <td>{{ $data->dokter->nama }}</td>
                         <td>{{ \Carbon\Carbon::parse($data->tgl_jadwal)->translatedFormat('l, d F y') }}</td>
+                        <td>{{ $data->jam_jadwal }}</td>
                       </tr>
                       @empty
                       <td colspan="2" class="text-center">
                         Tidak ada data ditemukan.
                       </td>
-                      @endforelse ($datas as $data)
+                      @endforelse
                     </table>
                 </div>
               </div>
