@@ -12,7 +12,7 @@
               <h3>Selamat datang, {{ Auth::guard('pasien')->user()->nama }}!</h3>
               @if(session()->has('error'))
               <div class="alert alert-light-danger color-danger">
-                  {{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                   {{ session()->get('error') }}
               </div>
               @endif
@@ -74,20 +74,23 @@
                 <div class="card-body list-jadwal">
                     <table class="table thead-dark">
                       <tr>
+                        <th>No. Antrian</th>
                         <th>Nama Dokter</th>
-                        <th>Tanggal Jadwal</th>
-                        {{-- <th>Waktu</th> --}}
+                        <th>Tanggal</th>
+                        <th>Jam</th>
                       </tr>
                       @forelse ($datas as $data)
                       <tr>
+                        <td>{{ $data->antrian }}</td>
                         <td>{{ $data->dokter->nama }}</td>
-                        <td>{{ \Carbon\Carbon::parse($data->tgl_jadwal)->translatedFormat('l, d F y') }}</td>
+                        <td>{{ \Carbon\Carbon::parse($data->tgl_jadwal)->translatedFormat('l, d M Y') }}</td>
+                        <td>{{ Carbon\Carbon::parse($data->jam_jadwal)->format('H:i') }} WIB</td>
                       </tr>
                       @empty
-                      <td colspan="2" class="text-center">
+                      <td colspan="4" class="text-center">
                         Tidak ada data ditemukan.
                       </td>
-                      @endforelse ($datas as $data)
+                      @endforelse
                     </table>
                 </div>
               </div>

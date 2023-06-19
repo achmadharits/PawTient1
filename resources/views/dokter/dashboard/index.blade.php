@@ -22,7 +22,7 @@
 
         <section class="section">
           <div class="row">
-            <div class="col-lg-8 col-12">
+            <div class="col-lg-6 col-12">
               <div class="row">
                 <div class="col-md-6 col-lg-6 col-12 col-sm-6">
                   <div class="card">
@@ -86,74 +86,40 @@
               
             </div>
 
-            <div class="col-lg-4 col-12">
-              <div class="card">
+            <div class="col-lg-6 col-12">
+              <div class="card" style=" height:435px">
                 <div class="card-header">
                   <div class="row">
                     <div class="col-lg-7 col-md-7 col-sm-7 col-7">
-                      <h6>Daftar Pasien</h6>
+                      <h5>Jadwal Hari Ini</h5>
+                      <small>{{ Carbon\Carbon::parse(now()->toDateString())->translatedFormat('l, d M Y') }}</small>
                     </div>
-                    <div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex justify-content-end">
+                    {{-- <div class="col-lg-5 col-md-5 col-sm-5 col-5 d-flex justify-content-end">
                       <a title="Lihat semua" href="{{ url('pasien') }}">
                         <iconify-icon icon="akar-icons:enlarge" class="secondary"></iconify-icon>
                       </a>
-                    </div>
+                    </div> --}}
                   </div>
                 </div>
-                <div class="card-body">
-                  @foreach ($pasien as $p)
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/patient-male.png') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-3">
-                          <h6>{{ $p->nama }}</h6>
-                          <small>{{ $p->email }}</small>
-                    </div>
-                  </div>
-                  @endforeach
-                  
-
-                  {{-- <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
-
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
-
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div>
-
-                  <div class="patient-list d-flex align-items-center">
-                    <div class="avatar-img">
-                      <img src="{{ asset('asset/img/faces/3.jpg') }}" alt="">
-                    </div>
-                    <div class="avatar-name ms-4">
-                      <h6>Havina Leli</h6>
-                      <small>havina@email.com</small>
-                    </div>
-                  </div> --}}
-
+                <div class="card-body list-jadwal">
+                  <table class="table thead-dark">
+                    <tr>
+                      <th>No. Antrian</th>
+                      <th>Nama Pasien</th>
+                      <th>Jam</th>
+                    </tr>
+                    @forelse ($datas as $data)
+                    <tr>
+                      <td>{{ $data->antrian }}</td>
+                      <td>{{ $data->pasien->nama }}</td>
+                      <td>{{ \Carbon\Carbon::parse($data->jam_jadwal)->format('H:i') }} WIB</td>
+                    </tr>
+                    @empty
+                    <td colspan="3" class="text-center">
+                      Tidak ada jadwal hari ini.
+                    </td>
+                    @endforelse
+                  </table>
                 </div>
               </div>
             </div>

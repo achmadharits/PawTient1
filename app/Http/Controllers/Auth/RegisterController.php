@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Dokter;
 use App\Models\Pasien;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Providers\RouteServiceProvider;
@@ -94,7 +95,6 @@ class RegisterController extends Controller
     {
         $this->validate($request, [
             'nama' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:dokter', 'unique:pasien'],
             'no_hp' => ['required', 'numeric'],
             'password' => ['required', 'string', 'min:8'],
             'confirm_password' => ['required', 'same:password'],
@@ -107,6 +107,9 @@ class RegisterController extends Controller
         $id_pasien = $this->getCustomIdPasien($id_pasien + 1);
 
         if($request['role'] == 'dokter gigi'){
+            $this->validate($request, [
+                'email' => ['required', 'string', 'unique:dokter'],
+            ]);
             Dokter::create([
                 'id_dokter' => $id_dokter,
                 'nama' => $request['nama'],
@@ -116,6 +119,9 @@ class RegisterController extends Controller
                 'no_str' => $request['no_str'],
             ]);
         }elseif($request['role'] == 'pasien'){
+            $this->validate($request, [
+                'email' => ['required', 'string', 'unique:pasien'],
+            ]);
             Pasien::create([
                 'id_pasien' => $id_pasien,
                 'nama' => $request['nama'],

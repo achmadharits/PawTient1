@@ -24,12 +24,17 @@
                     {{-- Jenis konsultasi --}}
                     <div class="form-group">
                       <label for="id_pasien">Jenis Konsultasi</label>
-                      <select name="id_jenis" class="form-select">
+                      <select name="id_jenis" class="form-select @error('id_jenis') is-invalid @enderror">
                         <option value="">Pilih</option>
                         @foreach ($jenis as $jenis)
                         <option value="{{ $jenis->id_jenis }}">{{ $jenis->jenis }}</option>
                         @endforeach
                       </select>
+                      @error('id_jenis')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                      @enderror
                     </div>
                     {{-- Nama pasien --}}
                     <div class="form-group">

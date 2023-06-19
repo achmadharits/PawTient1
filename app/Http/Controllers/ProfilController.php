@@ -107,7 +107,7 @@ class ProfilController extends Controller
             return redirect('profil')->withSuccess('Profil berhasil diperbaharui');
         }elseif(Auth::guard('pasien')->check()){
             $user = Auth::guard('pasien')->user()->id_pasien;
-            $datas = Dokter::find($user);
+            $datas = Pasien::find($user);
 
             $datas->nama = $request->nama;
             $datas->alamat = $request->alamat;

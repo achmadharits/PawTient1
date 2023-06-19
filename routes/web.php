@@ -56,8 +56,8 @@ Route::name('auth.')->group(function (){
 });
 
 Route::name('register.')->group(function (){
-    Route::get('/register', [RegisterController::class, 'index'])->name('index');
-    Route::post('/register', [RegisterController::class, 'create'])->name('create');
+    Route::get('/register', [RegisterController::class, 'index'])->name('index')->middleware(['guest:dokter,pasien']);
+    Route::post('/register', [RegisterController::class, 'create'])->name('create')->middleware(['guest:dokter,pasien']);
 });
 
 // route pasien
