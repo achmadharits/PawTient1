@@ -20,7 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('jadwal/{id}/{tanggal}', [ApiJadwalController::class, 'getHari']);
-Route::resource('jadwal', ApiJadwalController::class);
+Route::get('data-jadwal/{id}/{tanggal}', [ApiJadwalController::class, 'getJadwal']);
+// Route::resource('jadwal', ApiJadwalController::class);
 
 
 // class ApiJadwalController extends Controller

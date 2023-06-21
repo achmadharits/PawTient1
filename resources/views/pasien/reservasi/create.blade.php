@@ -15,6 +15,27 @@
         </div>
 
         <section class="section">
+          <div class="card d-none" id="dataAntrian">
+            <div class="card-header" style="margin-bottom: -10px;">
+              <h6>Daftar Antrian Pasien</h6>
+              <p id="tglText" style="margin-bottom: -10px"></p>
+            </div>
+            <div class="card-body">
+              <table class="table table-responsive table-striped">
+                <thead>
+                  <tr>
+                    <th>Antrian</th>
+                    <th>Nama</th>
+                    <th>Jam Jadwal</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
           <div class="card">
             <div class="card-body">
               @if(session()->has('error'))
@@ -45,7 +66,7 @@
                   <div class="form-group">
                     <label for="tgl_reservasi">Tanggal Reservasi</label>
                     <input name="tgl_reservasi" type="text" id="datepicker" class="form-control @error('tgl_reservasi') is-invalid @enderror" 
-                    autocomplete="off" placeholder="YYYY/MM/DD" onchange="getJamKerja();">
+                    autocomplete="off" placeholder="YYYY/MM/DD" onchange="getJamKerja(); getJadwal()">
                     @error('tgl_reservasi')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -76,14 +97,11 @@
                     @enderror
                   </div>
                 </div>
-  
                 <button type="submit" class="btn btn-primary mt-3">Simpan</button>
               </form>
-
-
-
             </div>
           </div>
+
         </section>
       </div>
   </div>
@@ -122,16 +140,15 @@
     $('#timepicker').timepicker('option', 'maxTime', max);
     $('#timepicker').timepicker('option', ' defaultTime', min);
   }
-
-
   function getJamKerja() {
+    const api = "{{ url('/api/jadwal/') }}";
     let id_dokter = "{{ $datas->id_dokter }}";
     let tanggal = document.getElementById("datepicker").value;
     let newTgl = moment(tanggal).format('YYYY-MM-DD');
     let startHour;
     let endHour;
 
-    axios.get('/api/jadwal/'+id_dokter+'/'+newTgl, {
+    axios.get(api+'/'+id_dokter+'/'+newTgl, {
     })
     .then(function (response) {
       let workHours = response.data.jadwal;
@@ -157,8 +174,52 @@
         listWidth: .5,
     });
     
-
   }
-  
+
+  function getJadwal(){
+    let dataAntrian;
+    const api = "{{ url('/api/data-jadwal/') }}";
+    let id_dokter = "{{ $datas->id_dokter }}";
+    let tanggal = document.getElementById("datepicker").value;
+    let newTgl = moment(tanggal).format('YYYY-MM-DD');
+
+    axios.get(api+'/'+id_dokter+'/'+newTgl, {
+    })
+    .then(function (response) {
+      dataAntrian = response.data.jadwal;
+      console.log(dataAntrian);
+      $('#dataAntrian').removeClass('d-none');
+      renderDataInTheTable(dataAntrian);
+
+      // set info tanggal card
+      moment.locale('id');
+      let tglText = moment(newTgl).format('LL');
+      console.log(tglText);
+      $("#tglText").html(tglText);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+    function renderDataInTheTable(dataAntrian) {
+      const mytable = document.getElementById("table-body");
+      dataAntrian.forEach(data => {
+        let newRow = document.createElement("tr");
+        Object.values(data).forEach((value, index) => {
+          let cell = document.createElement("td");
+          if(index === 2)
+            {
+              cell.innerText = moment(value, 'HH:mm:ss').format('HH:mm');
+              console.log(cell.innerText);
+            }else{
+                cell.innerText = value;
+            }
+
+          newRow.appendChild(cell);
+        })
+        mytable.appendChild(newRow);
+      });
+    }
+  }
 </script>
 @endsection

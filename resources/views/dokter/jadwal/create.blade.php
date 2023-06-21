@@ -11,18 +11,32 @@
             <div class="col-12 col-md-6 order-md-1 order-last">
               <h3>Buat Jadwal Kontrol Baru</h3>
             </div>
-            {{-- <div class="col-12 col-md-6 order-md-2 order-first">
-              <div class="button">
-                <a href="#" class="btn icon icon-left btn-primary">
-                  <iconify-icon icon="akar-icons:plus"></iconify-icon>
-                  Buat Jadwal
-                </a>
-              </div>
-            </div> --}}
           </div>
         </div>
 
         <section class="section">
+          <div class="card d-none" id="dataAntrian">
+            <div class="card-header" style="margin-bottom: -10px;">
+              <h6>Daftar Antrian Pasien</h6>
+              <p id="tglText" style="margin-bottom: -10px"></p>
+            </div>
+            <div class="card-body">
+              <table class="table table-responsive table-striped">
+                <thead>
+                  <tr>
+                    <th>Antrian</th>
+                    <th>Nama</th>
+                    <th>Jam Jadwal</th>
+                  </tr>
+                </thead>
+                <tbody id="table-body">
+                  
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+
           <div class="card">
             <div class="card-body">
               <form method="POST" action="{{ url('jadwal-kontrol') }}">
@@ -54,7 +68,7 @@
                   <div class="form-group">
                     <label for="tgl_jadwal">Tanggal Jadwal</label>
                     <input name="tgl_jadwal" type="text" id="datepicker" class="form-control @error('tgl_jadwal') is-invalid @enderror" 
-                    autocomplete="off" placeholder="YYYY/MM/DD" onchange="getJamKerja();">
+                    autocomplete="off" placeholder="YYYY/MM/DD" onchange="getJamKerja(); getJadwal()">
                     @error('tgl_jadwal')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
@@ -154,8 +168,51 @@
         ],
         listWidth: .5,
     });
-    
+  }
+  function getJadwal(){
+    let dataAntrian;
+    const api = "{{ url('/api/data-jadwal/') }}";
+    let id_dokter = "{{ Auth::guard('dokter')->user()->id_dokter }}";
+    let tanggal = document.getElementById("datepicker").value;
+    let newTgl = moment(tanggal).format('YYYY-MM-DD');
 
+    axios.get(api+'/'+id_dokter+'/'+newTgl, {
+    })
+    .then(function (response) {
+      dataAntrian = response.data.jadwal;
+      console.log(dataAntrian);
+      $('#dataAntrian').removeClass('d-none');
+      renderDataInTheTable(dataAntrian);
+
+      // set info tanggal card
+      moment.locale('id');
+      let tglText = moment(newTgl).format('LL');
+      console.log(tglText);
+      $("#tglText").html(tglText);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
+    function renderDataInTheTable(dataAntrian) {
+      const mytable = document.getElementById("table-body");
+      dataAntrian.forEach(data => {
+        let newRow = document.createElement("tr");
+        Object.values(data).forEach((value, index) => {
+          let cell = document.createElement("td");
+          if(index === 2)
+            {
+              cell.innerText = moment(value, 'HH:mm:ss').format('HH:mm');
+              console.log(cell.innerText);
+            }else{
+                cell.innerText = value;
+            }
+
+          newRow.appendChild(cell);
+        })
+        mytable.appendChild(newRow);
+      });
+    }
   }
   
 </script>
