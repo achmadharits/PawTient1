@@ -196,6 +196,7 @@
 
     function renderDataInTheTable(dataAntrian) {
       const mytable = document.getElementById("table-body");
+      mytable.innerHTML = '';
       dataAntrian.forEach(data => {
         let newRow = document.createElement("tr");
         Object.values(data).forEach((value, index) => {
