@@ -122,7 +122,7 @@ class DokterReservasiController extends Controller
         
         // $response = Http::withHeaders(['Authorization' => 'zn#w4#AY8zmfdpnk6PJ8'])->post('https://api.fonnte.com/device');
         $response = Http::withHeaders([
-            'Authorization' => '3obysh37CBiBiY7F@ood', 
+            'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
         ])->post('https://api.fonnte.com/send', [
             'target' => $jadwal->pasien->no_hp,
             'message' => $pesan,
@@ -151,7 +151,7 @@ class DokterReservasiController extends Controller
         '*Klinik Gigi Bara Senyum*'.PHP_EOL.'Ruko Pondok Citra Eksekutif R2'.PHP_EOL.'Jl. Kendal Sari Selatan, Kec. Rungkut'.PHP_EOL.'Surabaya';
 
         $response = Http::withHeaders([
-            'Authorization' => '3obysh37CBiBiY7F@ood', 
+            'Authorization' => 'zn#w4#AY8zmfdpnk6PJ8', 
         ])->post('https://api.fonnte.com/send', [
             'target' => $datas->pasien->no_hp,
             'message' => $pesan,
