@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\JadwalKontrol;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\JadwalPraktik;
@@ -26,6 +27,28 @@ class ApiJadwalController extends Controller
         $jadwal = JadwalPraktik::where('id_dokter', $id)
         ->where('hari', $day)
         ->pluck('jam_kerja');
+
+        return [
+            'jadwal' => $jadwal,
+        ];
+    }
+
+    function setDate($date){
+        Carbon::setLocale('id');
+        Carbon::parse($date)->translatedFormat('l, d F Y');
+    }
+    function timeFormat($time){
+        Carbon::parse($time)->format('H:i');
+    }
+    function getJadwal($id, $tanggal){
+        $jadwal = JadwalKontrol::where('id_dokter', $id)
+        ->where('tgl_jadwal', $tanggal)
+        ->join('pasien', 'jadwalkontrol.id_pasien', '=', 'pasien.id_pasien')
+        ->orderBy('antrian')
+        ->select('antrian','pasien.nama','jam_jadwal')
+        ->get();
+
+        // $jadwal->jam_jadwal = Carbon::parse($jadwal->jam_jadwal)->format('H:i');
 
         return [
             'jadwal' => $jadwal,
