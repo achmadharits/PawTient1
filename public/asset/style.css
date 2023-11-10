@@ -4,7 +4,7 @@
 }
 body{
   font-family: 'Urbanist' !important;
-  color: #1E2B4F !important;
+  color: #4f361e !important;
   /* font-weight: 400; */
 }
 body .split-screen{
@@ -14,28 +14,28 @@ body .split-screen{
 /* button */
 a.btn.btn-primary{
   color: #fff ;
-  background-color: #5A65BA ;
+  background-color: #ba9c5a ;
   padding: 10px 24px ;
-  border: none important;
+  border: 1px solid #ba9c5a;
   border-radius: 20px ;
   gap: 10px;
 }
 a.btn.btn-primary:hover{
   color: #fff;
   /* font-weight: 600; */
-  background-color: #40477c ;
+  background-color: #7c7140 ;
 }
 .btn-secondary{
-  color: #5A65BA;
+  color: #ba9c5a;
   background: none;
-  border: 1px solid #5A65BA;
+  border: 1px solid #ba9c5a;
   padding: 10px 24px;
   border-radius: 20px;
   gap: 10px;
 }
 .btn-secondary:hover{
   color: #fff;
-  background-color: #5A65BA;
+  background-color: #7c7140;
 }
 
 /* landing page */
@@ -96,11 +96,12 @@ a.btn.btn-primary:hover{
   margin-top: 20px;
 }
 .auth-left{
-  background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.5)),
-  url('../asset/img/login-img.png');
+  /* background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.5)),
+  /* url('../asset/img/login-img.png'); */
+  background-color: #7c7140;
   background-size: cover;
   align-items: center;
-}
+  }
 .auth-left h5{
   color: #fff;
 }
@@ -122,10 +123,10 @@ a.btn.btn-primary:hover{
 .input-auth a{
   font-weight: 700;
   text-decoration: none;
-  color: #1E2B4F;
+  color: #4f361e;
 }
 .input-auth a:hover{
-  color: #40477c;
+  color: #7c6940;
 }
 @media screen and (min-width: 900px){
   .split-screen{
@@ -150,7 +151,7 @@ a.btn.btn-primary:hover{
 
 /* form control */
 .input-auth .form-control, .input-auth .form-select{
-  background-color: #eef1f5 !important;
+  background-color: #f5f3ee !important;
 }
 .form-control, .form-select{
   border-radius: 12px !important;
@@ -172,10 +173,10 @@ iconify-icon{
 }
 iconify-icon.secondary{
   font-size: 20px;
-  color: #A9B4CD;
+  color: #cdc3a9;
 }
 .sidebar-item.active>.sidebar-link iconify-icon{
-  color: #414BA0;
+  color: #a07a41;
 }
 .icon-left iconify-icon{
   vertical-align: middle;
@@ -185,7 +186,7 @@ iconify-icon.secondary{
 }
 iconify-icon.stat-icon{
   font-size: 30px;
-  color: #414BA0;
+  color: #a07a41;
 }
 
 /* patien-list */
@@ -244,7 +245,7 @@ button.btn.btn-icon{
   height: 28px;
 }
 .btn-icon iconify-icon{
-  color: #606D93;
+  color: #938a60;
   font-size: 15px;
   margin-left: -4px;
 }
@@ -275,16 +276,16 @@ button.btn.btn-icon{
   background-color: #e04b1e !important;
 }
 .btn-purple{
-  background-color: #5a65ba !important;
+  background-color: #ba9c5a !important;
   color: #fff !important;
   border-radius: 10px !important;
 }
 .btn-purple:hover{
-  background-color: #40477c !important;
+  background-color: #7c7140!important;
 }
 .btn-grey{
   background-color: #DDE2EC !important;
-  color: #606D93 !important;
+  color: #938a60 !important;
   border-radius: 10px !important;
 }
 .btn-grey:hover{

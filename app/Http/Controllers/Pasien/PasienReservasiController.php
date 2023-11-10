@@ -111,12 +111,12 @@ class PasienReservasiController extends Controller
         if ($existingJadwal->contains('jam_jadwal', Carbon::parse($jam)->format('H:i:s'))) {
             return redirect('pasien/reservasi/'.$request->id_dokter.'/create')->withError('Jadwal yang diajukan sudah dimiliki pasien lain.');
         }
-
         Reservasi::create([
             'id_dokter' => $request['id_dokter'],
             'id_pasien' => $request['id_pasien'],
             'tgl_reservasi' => $newTgl,
             'jam_reservasi' => $request['jam_reservasi'],
+            'jenis_hewan' => $request['jenis_hewan'],
             'deskripsi' => $request['deskripsi'],
             'status' => 'Menunggu',
         ]);

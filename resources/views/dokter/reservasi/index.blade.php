@@ -31,6 +31,7 @@
                             <th data-sortable>Nama Pasien</th>
                             <th data-sortable>Tanggal Reservasi</th>
                             <th data-sortable>Jam Reservasi</th>
+                            <th data-sortable>Jenis Hewan</th>
                             <th data-sortable>Deskripsi</th>
                             <th>Aksi</th>
                         </tr>
@@ -41,6 +42,7 @@
                             <td>{{ $data->pasien->nama }}</td>
                             <td>{{ \Carbon\Carbon::parse($data->tgl_reservasi)->translatedFormat('l, d F Y') }}</td>
                             <td>{{ \Carbon\Carbon::parse($data->jam_reservasi)->format('H:i') }}</td>
+                            <td>{{ $data->jenis_hewan }}</td>
                             <td>{{ $data->deskripsi }}</td>
                             <td>
                               <div class="table-action">

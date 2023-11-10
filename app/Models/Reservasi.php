@@ -18,6 +18,7 @@ class Reservasi extends Model
         'id_pasien',
         'tgl_reservasi',
         'jam_reservasi',
+        'jenis_hewan',
         'status',
         'deskripsi'
     ];

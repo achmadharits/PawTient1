@@ -4,10 +4,10 @@
 <div class="split-screen">
     <div class="auth-left">
         <section class="copy">
-            <img src="{{ asset('asset/img/logo-white.svg') }}" alt="">
+            <!-- <img src="{{ asset('asset/img/logo-white.svg') }}" alt=""> -->
             <div class="mt-3">
             <h5>Selamat datang!</h5>
-            <p>Atur jadwal konsultasi gigi dengan mudah</p>
+            <!-- <p>Atur jadwal konsultasi gigi dengan mudah</p> -->
             </div>
         </section>
         </div>

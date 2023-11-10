@@ -84,6 +84,23 @@
                     </span>
                     @enderror
                   </div>
+                  
+                  {{-- jenis hewan --}}
+                  <div class="form-group">
+                    <label for="jenis_hewan">Jenis Hewan</label>
+                    <select  name="jenis_hewan" class="form-control @error('jenis_hewan') is-invalid @enderror" rows="2" autocomplete="off" placeholder="Tulis Jenis Hewan">
+                      <option value="Kucing">Kucing</option>
+                      <option value="Anjing">Anjing</option>
+                      <option value="Burung">Burung</option>
+                      <option value="Kadal">Kadal</option>
+                      <option value="Hewan Lain">Hewan Lain</option>
+                    </select>
+                    @error('jenis_hewan')
+                    <span class="invalid-feedback" role="alert">
+                        <strong>{{ $message }}</strong>
+                    </span>
+                    @enderror
+                  </div>
 
                   {{-- deskripsi --}}
                   <div class="form-group">

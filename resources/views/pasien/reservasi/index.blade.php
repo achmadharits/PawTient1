@@ -38,6 +38,7 @@
                             <th data-sortable>Nama Dokter</th>
                             <th data-sortable>Tanggal</th>
                             <th data-sortable>Jam</th>
+                            <th data-sortable>Jenis Hewan</th>
                             <th data-sortable>Deskripsi</th>
                             <th data-sortable>Status</th>
                             {{-- <th>Aksi</th> --}}
@@ -49,6 +50,7 @@
                             <td>{{ $data->dokter->nama }}</td>
                             <td>{{ $data->tgl_reservasi }}</td>
                             <td>{{ Carbon\Carbon::parse($data->jam_reservasi)->format('H:i') }}</td>
+                            <td>{{ $data->jenis_hewan }}</td>
                             <td>{{ $data->deskripsi }}</td>
                             <td><span class="badge {{ $data->status === 'Menunggu' ? 'bg-light-warning' : 'bg-light-secondary' }}">{{ $data->status }}</span></td>
                             <td>

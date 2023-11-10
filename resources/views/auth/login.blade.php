@@ -4,16 +4,16 @@
 <div class="split-screen">
     <div class="auth-left">
         <section class="copy">
-            <img src="{{ asset('asset/img/logo-white.svg') }}" alt="">
+            <!--<img src="{{ asset('asset/img/logo-white.svg') }}" alt="">-->
             <div class="mt-3">
             <h5>Selamat datang!</h5>
-            <p>Atur jadwal konsultasi gigi dengan mudah</p>
+            <!-- <p>Atur jadwal konsultasi gigi dengan mudah</p> -->
             </div>
         </section>
         </div>
         <div class="auth-right">
         <section class="copy">
-            <h4>Masuk ke akun DentistIn</h4>
+            <h4>Masuk ke akun Pawtient</h4>
             @if(session()->has('success'))
             <div class="alert alert-light-success alert-dismissible show fade">
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -111,7 +111,7 @@
 
                         <div class="row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button type="submit" class="btn.btn-primary">
                                     {{ __('Login') }}
                                 </button>
 

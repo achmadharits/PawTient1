@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('id_pasien')->references('id_pasien')->on('pasien')->cascadeOnDelete()->cascadeOnUpdate();
             $table->date('tgl_reservasi');
             $table->char('status', 50);
+            $table->string('jenis_hewan')->nullable();
             $table->string('deskripsi')->nullable();
             $table->timestamps();
         });
