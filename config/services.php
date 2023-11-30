@@ -30,4 +30,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'fonnte' => [
+        'base_uri' => 'https://api.fonnte.com',
+        'verify' => false, // Menonaktifkan verifikasi sertifikat SSL
+    ],
+
 ];
