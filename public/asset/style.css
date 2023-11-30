@@ -4,7 +4,7 @@
 }
 body{
   font-family: 'Urbanist' !important;
-  color: #4f361e !important;
+  color: #724500 !important;
   /* font-weight: 400; */
 }
 body .split-screen{
@@ -14,28 +14,29 @@ body .split-screen{
 /* button */
 a.btn.btn-primary{
   color: #fff ;
-  background-color: #ba9c5a ;
+  background-color: #E49B2D ;
   padding: 10px 24px ;
-  border: 1px solid #ba9c5a;
+  border: 1px solid #E49B2D;
   border-radius: 20px ;
   gap: 10px;
 }
 a.btn.btn-primary:hover{
   color: #fff;
   /* font-weight: 600; */
-  background-color: #7c7140 ;
+  background-color: #724500 ;
+  border: 1px solid #724500;
 }
 .btn-secondary{
-  color: #ba9c5a;
+  color: #E49B2D;
   background: none;
-  border: 1px solid #ba9c5a;
+  border: 1px solid #E49B2D;
   padding: 10px 24px;
   border-radius: 20px;
   gap: 10px;
 }
 .btn-secondary:hover{
   color: #fff;
-  background-color: #7c7140;
+  background-color: #724500;
 }
 
 /* landing page */
@@ -98,7 +99,7 @@ a.btn.btn-primary:hover{
 .auth-left{
   /* background: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0.5)),
   /* url('../asset/img/login-img.png'); */
-  background-color: #7c7140;
+  background-color: #724500;
   background-size: cover;
   align-items: center;
   }
@@ -123,10 +124,10 @@ a.btn.btn-primary:hover{
 .input-auth a{
   font-weight: 700;
   text-decoration: none;
-  color: #4f361e;
+  color: #885303;
 }
 .input-auth a:hover{
-  color: #7c6940;
+  color: #d69a3f;
 }
 @media screen and (min-width: 900px){
   .split-screen{
@@ -173,10 +174,10 @@ iconify-icon{
 }
 iconify-icon.secondary{
   font-size: 20px;
-  color: #cdc3a9;
+  color: #724500;
 }
 .sidebar-item.active>.sidebar-link iconify-icon{
-  color: #a07a41;
+  color: #724500;
 }
 .icon-left iconify-icon{
   vertical-align: middle;
@@ -186,7 +187,7 @@ iconify-icon.secondary{
 }
 iconify-icon.stat-icon{
   font-size: 30px;
-  color: #a07a41;
+  color: #ffc46b;
 }
 
 /* patien-list */
@@ -276,12 +277,12 @@ button.btn.btn-icon{
   background-color: #e04b1e !important;
 }
 .btn-purple{
-  background-color: #ba9c5a !important;
+  background-color: #E49B2D !important;
   color: #fff !important;
   border-radius: 10px !important;
 }
 .btn-purple:hover{
-  background-color: #7c7140!important;
+  background-color: #724500!important;
 }
 .btn-grey{
   background-color: #DDE2EC !important;

@@ -4,7 +4,7 @@
 <div class="split-screen">
     <div class="auth-left">
         <section class="copy">
-            <!-- <img src="{{ asset('asset/img/logo-white.svg') }}" alt=""> -->
+            <img src="{{ asset('asset/img/logo-white.png') }}" alt="">
             <div class="mt-3">
             <h5>Selamat datang!</h5>
             <!-- <p>Atur jadwal konsultasi gigi dengan mudah</p> -->
@@ -76,7 +76,7 @@
                 <label for="role" class="mt-3 mb-2" required>Daftar Sebagai</label>
                 <select class="form-select" name="role" id="selectRole">
                     <option value="">Pilih</option>
-                    <option value="dokter gigi">Dokter Gigi</option>
+                    <option value="dokter gigi">Dokter Hewan</option>
                     <option value="pasien">Pasien</option>
                 </select>
                 </div>

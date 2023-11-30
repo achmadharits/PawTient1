@@ -8,8 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     {{-- <title>{{ config('app.name', 'DentistIn') }}</title> --}}
-    <title>DentistIn</title>
-    <link rel="icon" href="{{ asset('asset/img/icon.svg') }}">
+    <title>PawTient</title>
+    <link rel="icon" href="{{ asset('asset/img/icon.png') }}">
 
     {{-- iconify --}}
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.7/dist/iconify-icon.min.js"></script>

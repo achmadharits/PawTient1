@@ -1,9 +1,9 @@
 <div id="sidebar" class="active">
     <div class="sidebar-wrapper active">
-        <div class="sidebar-header position-relative">
+        <div class="sidebar-header position-center">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <img src="{{ asset('asset/img/logo-color.svg') }}">
+                    <img src="{{ asset('asset/img/logo.png') }}">
                 </div>
                 {{-- <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" role="img" class="iconify iconify--system-uicons" width="20" height="20" preserveAspectRatio="xMidYMid meet" viewBox="0 0 21 21"><g fill="none" fill-rule="evenodd" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.5 14.5c2.219 0 4-1.763 4-3.982a4.003 4.003 0 0 0-4-4.018c-2.219 0-4 1.781-4 4c0 2.219 1.781 4 4 4zM4.136 4.136L5.55 5.55m9.9 9.9l1.414 1.414M1.5 10.5h2m14 0h2M4.135 16.863L5.55 15.45m9.899-9.9l1.414-1.415M10.5 19.5v-2m0-14v-2" opacity=".3"></path><g transform="translate(-210 -1)"><path d="M220.5 2.5v2m6.5.5l-1.5 1.5"></path><circle cx="220.5" cy="11.5" r="4"></circle><path d="m214 5l1.5 1.5m5 14v-2m6.5-.5l-1.5-1.5M214 18l1.5-1.5m-4-5h2m14 0h2"></path></g></g></svg>
@@ -27,12 +27,12 @@
                 
                     <li class="sidebar-item {{ $title == 'home' ? 'active' : '' }}">
                         <a href="{{ url('/home') }}" class='sidebar-link'>
-                            <iconify-icon icon="akar-icons:home-alt1"></iconify-icon>
+                            <iconify-icon icon="tabler:home"></iconify-icon>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     
-                    <li class="sidebar-item has-sub {{ $title == 'jadwal' ? 'active' : '' }}">
+                    <!-- <li class="sidebar-item has-sub {{ $title == 'jadwal' ? 'active' : '' }}">
                         <a href="{{ url('/jadwal-kontrol') }}" class='sidebar-link'>
                             <iconify-icon icon="akar-icons:calendar"></iconify-icon>
                             <span>Jadwal Kontrol</span>
@@ -45,16 +45,16 @@
                                 <a href="{{ url('/jadwal-kontrol/create') }}">Buat Jadwal</a>
                             </li>
                         </ul>
-                    </li>
+                    </li> -->
 
                     <li class="sidebar-item {{ $title == 'reservasi' ? 'active' : '' }}">
                         <a href="{{ url('/dokter/reservasi') }}" class='sidebar-link'>
-                            <iconify-icon icon="akar-icons:schedule"></iconify-icon>
+                            <iconify-icon icon="tabler:calendar-time"></iconify-icon>
                             <span>Reservasi</span>
                         </a>
                     </li>
                     
-                    <li class="sidebar-item  {{ $title == 'absensi' ? 'active' : '' }}">
+                    <!-- <li class="sidebar-item  {{ $title == 'absensi' ? 'active' : '' }}">
                         <a href="{{ url('/izin') }}" class='sidebar-link'>
                             <iconify-icon icon="akar-icons:door"></iconify-icon>
                             <span>Izin Absensi</span>
@@ -82,19 +82,19 @@
                                 <a href="layout-vertical-1-column.html">Buat Rekam Medis</a>
                             </li>
                         </ul> --}}
-                    </li>
+                    </li> -->
 
                     <li class="sidebar-title">Pengaturan</li>
                     
                     <li class="sidebar-item {{ $title == 'praktik' ? 'active' : '' }}">
                         <a href="{{ url('/jadwal-praktik') }}" class='sidebar-link'>
-                            <iconify-icon icon="akar-icons:dental"></iconify-icon>
+                            <iconify-icon icon="tabler:paw"></iconify-icon>
                             <span>Jadwal Praktik</span>
                         </a>
                     </li>
                     <li class="sidebar-item">
                         <a href="{{ route('auth.logout') }}" class='sidebar-link'>
-                            <iconify-icon icon="akar-icons:sign-out"></iconify-icon>
+                            <iconify-icon icon="tabler:logout"></iconify-icon>
                             <span>Keluar</span>
                         </a>
                     </li>

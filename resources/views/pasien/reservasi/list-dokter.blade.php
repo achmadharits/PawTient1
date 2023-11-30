@@ -10,8 +10,8 @@
         <div class="page-title">
           <div class="row mb-4">
             <div class="col-12 col-md-6 order-md-1 order-last">
-              <h3>Daftar Dokter Gigi</h3>
-              <p>Pilih salah satu dokter gigi untuk melakukan reservasi.</p>
+              <h3>Daftar Dokter Hewan</h3>
+              <p>Pilih salah satu dokter hewan untuk melakukan reservasi.</p>
             </div>
           </div>
         </div>
@@ -25,7 +25,7 @@
                 <div class="card mb-3 shadow-sm" style="width: 14rem;">
                   <img src="{{ asset('asset/img/doc.png') }}" class="card-img-top" alt="...">
                   <div class="card-body">
-                    <h6 class="mb-1">drg. {{ $data->nama }}</h6>
+                    <h6 class="mb-1">drh. {{ $data->nama }}</h6>
                     <small class="text-muted">
                       @foreach ($data->jadwalPraktik as $val)
                         @if ($loop->last)

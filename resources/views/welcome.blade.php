@@ -4,8 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>DentistIn</title>
-        <!-- <link rel="icon" href="{{ asset('asset/img/icon.svg') }}"> -->
+        <title>Pawtient</title>
+        <link rel="icon" href="{{ asset('asset/img/icon.png') }}">
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;600;700&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@
             <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">
-                <!-- <img src="{{ asset('asset/img/logo-color.svg') }}"> -->
+                <img src="{{ asset('asset/img/logo.png') }}">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -46,22 +46,22 @@
             {{-- hero --}}
             <div class="hero">
             <div class="row align-items-center">
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 justify-content-center">
+                <div class="col-xl-7 col-lg-7 col-md-7 col-sm-12 justify-content-center">
                 <div class="text-wrapper">
                     <h1 class="hero-title">
-                    Atur Jadwal Konsultasi Hewan Peliharaan Anda dengan Mudah!
+                    Jaga Kesehatan Hewan Peliharaan Anda dengan Lebih Mudah Bersama PawTient! 
                     </h1>
-                    <!-- <p class="hero-subtitle">
-                    DentistIn hadir untuk mengatur jadwal konsultasi, cek jadwal konsultasi aktif, hingga rekap rekam medis.
-                    </p> -->
                     <p class="hero-subtitle">
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+                    Atur Jadwal Konsultasi, Pantau Aktivitas Janji, dan Akses Rekam Medis Hewan Anda dalam Sekejap.
+                    </p>
+                    <p class="hero-subtitle">
+                    
                     </p>
                     <a class="btn btn-primary" href="{{ route('auth.index') }}">Atur Jadwal</a>
                 </div>
                 </div>
-                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 justify-content-center">
-                <!-- <img src="{{ asset('asset/img/hero-img.png') }}" class="mx-auto d-block" width="430px"> -->
+                <div class="col-xl-5 col-lg-5 col-md-5   col-sm-12 justify-content-center">
+                <img src="{{ asset('asset/img/hero-img.png') }}" class="mx-auto d-block" width="430px">
                 </div>
             </div>
             </div>

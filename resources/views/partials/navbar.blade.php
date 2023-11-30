@@ -29,7 +29,7 @@
                                 </h6>
                                 <p class="mb-0 text-sm text-gray-600"> 
                                   @auth('dokter')
-                                    Dokter Gigi
+                                    Dokter Hewan
                                   @endauth
                                   @auth('pasien')
                                     Pasien
