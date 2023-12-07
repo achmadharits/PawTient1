@@ -39,7 +39,7 @@ class PasienReservasiController extends Controller
         // ->get(['dokter.nama', 'dokter.id_dokter', 'jadwalpraktik.hari', 'jadwalpraktik.jam_kerja']);
         // dd(isset($datas[1]->jadwalPraktik->tanggal));
 
-        return view('pasien.reservasi.list-dokter',[
+        return view('pasien.reservasi.list-dokter', [
             'datas' => $datas,
             'title' => 'reservasi',
             'jadwal' => $jadwal,
@@ -56,23 +56,23 @@ class PasienReservasiController extends Controller
         $datas = Dokter::find($id);
         $tanggal = JadwalPraktik::where('id_dokter', $datas->id_dokter)->get();
         $tgl_izin = IzinAbsensi::where('id_dokter', $datas->id_dokter)
-        ->where('tgl_izin', '>' ,now()->toDateString())
-        ->pluck('tgl_izin');
+            ->where('tgl_izin', '>', now()->toDateString())
+            ->pluck('tgl_izin');
 
-        foreach($tanggal as $tgl){
-            if($tgl->hari == "Senin"){
+        foreach ($tanggal as $tgl) {
+            if ($tgl->hari == "Senin") {
                 $tgl->hari = 1;
-            }elseif($tgl->hari == "Selasa"){
+            } elseif ($tgl->hari == "Selasa") {
                 $tgl->hari = 2;
-            }elseif($tgl->hari == "Rabu"){
+            } elseif ($tgl->hari == "Rabu") {
                 $tgl->hari = 3;
-            }elseif($tgl->hari == "Kamis"){
+            } elseif ($tgl->hari == "Kamis") {
                 $tgl->hari = 4;
-            }elseif($tgl->hari == "Jumat"){
+            } elseif ($tgl->hari == "Jumat") {
                 $tgl->hari = 5;
-            }elseif($tgl->hari == "Sabtu"){
+            } elseif ($tgl->hari == "Sabtu") {
                 $tgl->hari = 6;
-            }elseif($tgl->hari == "Minggu"){
+            } elseif ($tgl->hari == "Minggu") {
                 $tgl->hari = 7;
             }
         }
@@ -109,7 +109,7 @@ class PasienReservasiController extends Controller
 
         // Periksa jika jam baru sudah ada pada tanggal yang sama
         if ($existingJadwal->contains('jam_jadwal', Carbon::parse($jam)->format('H:i:s'))) {
-            return redirect('pasien/reservasi/'.$request->id_dokter.'/create')->withError('Jadwal yang diajukan sudah dimiliki pasien lain.');
+            return redirect('pasien/reservasi/' . $request->id_dokter . '/create')->withError('Jadwal yang diajukan sudah dimiliki pasien lain.');
         }
         Reservasi::create([
             'id_dokter' => $request['id_dokter'],

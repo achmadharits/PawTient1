@@ -17,6 +17,7 @@ use App\Http\Controllers\IzinAbsensiController;
 use App\Http\Controllers\ListPasienController;
 use App\Http\Controllers\Pasien\PasienReservasiController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\PDFController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,24 +50,25 @@ Route::get('/', function () {
 
 //Route juga bisa dikelompokkan contohnya macam route dibawah ini
 //route dibawah ini hasilnya nanti setiap nama routenya diawali auth.namaRoute
-Route::name('auth.')->group(function (){
+Route::name('auth.')->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('index')->middleware(['guest:dokter,pasien']);
     Route::post('/login', [LoginController::class, 'login'])->name('login')->middleware(['guest:dokter,pasien']);
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::name('register.')->group(function (){
+Route::name('register.')->group(function () {
     Route::get('/register', [RegisterController::class, 'index'])->name('index')->middleware(['guest:dokter,pasien']);
     Route::post('/register', [RegisterController::class, 'create'])->name('create')->middleware(['guest:dokter,pasien']);
 });
 
 // route pasien
-Route::prefix('pasien')->name('pasien.')->middleware('auth:pasien')->group(function(){
+Route::prefix('pasien')->name('pasien.')->middleware('auth:pasien')->group(function () {
     Route::get('reservasi/dokter', [PasienReservasiController::class, 'viewDokter'])->name('dokter');
     Route::get('reservasi/{id}/create', [PasienReservasiController::class, 'create']);
     Route::resource('reservasi', PasienReservasiController::class)->except(['create']);
 });
 
+Route::get('generate-pdf/{id}', [PDFController::class, 'generatePDF']);
 
 Route::middleware('auth:dokter')->group(function () {
     Route::resource('jadwal-kontrol', DokterJadwalKontrolController::class);
@@ -76,7 +78,7 @@ Route::middleware('auth:dokter')->group(function () {
     Route::get('rekam-medis/{id}/create', [RekamMedisController::class, 'create']);
     Route::get('rekam-medis/jadwal', [RekamMedisController::class, 'viewJadwal']);
     Route::resource('rekam-medis', RekamMedisController::class);
-    Route::prefix('dokter')->name('dokter.')->group(function(){
+    Route::prefix('dokter')->name('dokter.')->group(function () {
         Route::post('reservasi/save/{id}', [DokterReservasiController::class, 'saveJadwal']);
         Route::post('reservasi/tolak/{id}', [DokterReservasiController::class, 'declineJadwal']);
         Route::resource('reservasi', DokterReservasiController::class);
@@ -97,5 +99,3 @@ Route::get('/home', [HomeController::class, 'index'])->middleware('auth:pasien,d
 // jadi urutannya harus sesuai yaitu pasien dulu baru dokter
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-
